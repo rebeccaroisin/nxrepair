@@ -1,7 +1,6 @@
 import pysam
 import collections
 import numpy as np
-import scipy.stats
 import matplotlib.pyplot as plt
 from scipy import stats
 from intervalNode import IntervalNode
@@ -84,7 +83,7 @@ def get_insertlengths(reads):
     Function to calculate interval sizes of a set of mate pairs.
 
     Arguments:
-    reads: a list of mate pairs as bx interal tree node objects
+    reads: a list of mate pairs as interal tree node objects
 
     Return two numpy arrays: an array of insert sizes (integers) and an array of strand alignments (boolean)  
     """
@@ -466,12 +465,12 @@ class aligned_assembly:
             plt.tick_params(axis='both', which='major', labelsize=20)
             lns1 = ax1.plot(positions, probs, c="k", label="Support")
             #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
-            ax1.set_xticks([0, 400000, 800000, 1200000])
+            #ax1.set_xticks([0, 400000, 800000, 1200000])
             anomalies_to_plot = sorted(break_points[ref])
             #anomalies_y = np.zeros(len(anomalies_to_plot))
-            anomalies_y = [-8] * len(anomalies_to_plot)
+            anomalies_y = [-10] * len(anomalies_to_plot)
 
-            ax1.scatter(anomalies_to_plot[1:-1], anomalies_y[1:-1], c="r", marker = "o")
+            ax1.scatter(anomalies_to_plot, anomalies_y, c="r", marker = "o")
             print "anomalies", anomalies_to_plot
 
             if img_name != None:
