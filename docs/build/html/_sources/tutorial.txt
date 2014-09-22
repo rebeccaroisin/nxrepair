@@ -7,13 +7,13 @@ NxRepair is a python module that automatically detects large structural errors i
 Installing NxRepair
 ^^^^^^^^^^^^^^^^^^^^
 
-NxRepair program can be cloned from my sandbox repository:
+NxRepair program can be cloned from github:
 
 .. code-block:: bash
 
-    git clone ukch-git.illumina.com:sandbox/rmurphy
+    git clone https://github.com/rebeccaroisin/nxrepair
 
-NxRepair also uses several other python libraries, which you will need to install. Specifically, you will need:
+NxRepair uses several other python libraries, which you will need to install. Specifically, you will need:
 
 * scipy
 * numpy
@@ -34,7 +34,7 @@ If you don't currently have any of these libraries, we recommend installing Anac
 
 Pysam can also be installed using "pip install", but errors are more common. 
 
-Assistance with installation errors for both pysam_ can be found online.
+Assistance with installation errors for pysam_ can be found online. Note that the current version of pysam wraps samtools-0.1.19 and tabix-0.2.6.
 
 .. _pysam: https://groups.google.com/forum/#!forum/pysam-user-group
 

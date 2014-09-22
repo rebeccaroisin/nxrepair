@@ -53,11 +53,11 @@
 <p>NxRepair is a python module that automatically detects large structural errors in de novo assemblies using Nextera mate pair reads. The decector will break a contig at the site of an identified misassembly and will generate a new fasta file containing both the corrected contigs and the correct, unaffected contigs.</p>
 <div class="section" id="installing-nxrepair">
 <h2>Installing NxRepair<a class="headerlink" href="#installing-nxrepair" title="Permalink to this headline">¶</a></h2>
-<p>NxRepair program can be cloned from my sandbox repository:</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone ukch-git.illumina.com:sandbox/rmurphy
+<p>NxRepair program can be cloned from github:</p>
+<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/rebeccaroisin/nxrepair
 </pre></div>
 </div>
-<p>NxRepair also uses several other python libraries, which you will need to install. Specifically, you will need:</p>
+<p>NxRepair uses several other python libraries, which you will need to install. Specifically, you will need:</p>
 <ul class="simple">
 <li>scipy</li>
 <li>numpy</li>
@@ -72,7 +72,7 @@ pip install matplotlib
 </div>
 <p>If you don&#8217;t currently have any of these libraries, we recommend installing <a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>, a python distribution that includes all of these libraries, along with all major scientific and analytical python packages.</p>
 <p>Pysam can also be installed using &#8220;pip install&#8221;, but errors are more common.</p>
-<p>Assistance with installation errors for both <a class="reference external" href="https://groups.google.com/forum/#!forum/pysam-user-group">pysam</a> can be found online.</p>
+<p>Assistance with installation errors for <a class="reference external" href="https://groups.google.com/forum/#!forum/pysam-user-group">pysam</a> can be found online. Note that the current version of pysam wraps samtools-0.1.19 and tabix-0.2.6.</p>
 </div>
 <div class="section" id="running-nxrepair">
 <h2>Running NxRepair<a class="headerlink" href="#running-nxrepair" title="Permalink to this headline">¶</a></h2>
