@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Missassembly Detection With Python: API &mdash; misassembly_detection 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="misassembly_detection 1.0 documentation" href="index.html" />
+    <link rel="next" title="Tutorial: Misassembly Detection using Insert Probability" href="tutorial.html" />
+    <link rel="prev" title="Missassembly Detection with Python!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial: Misassembly Detection using Insert Probability"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Missassembly Detection with Python!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">misassembly_detection 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="missassembly-detection-with-python-api">
+<h1>Missassembly Detection With Python: API<a class="headerlink" href="#missassembly-detection-with-python-api" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-nxrepair"></span><dl class="class">
+<dt id="nxrepair.aligned_assembly">
+<em class="property">class </em><tt class="descclassname">nxrepair.</tt><tt class="descname">aligned_assembly</tt><big>(</big><em>bamfile</em>, <em>fastafile</em>, <em>min_size</em>, <em>threshold</em>, <em>step</em>, <em>window</em>, <em>minmapq</em>, <em>maxinsert</em>, <em>fraction</em>, <em>prior</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to hold a set of mate pair or paired end reads aligned to the scaffolded genome assembly</p>
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.breakContigs_double">
+<tt class="descname">breakContigs_double</tt><big>(</big><em>outfile</em>, <em>breakpoints</em>, <em>trim</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.breakContigs_double"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.breakContigs_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to break a contigs at positions identified as assembly errors and write a new fasta file containing all contigs (both altered and unaltered).</p>
+<p>Makes a two-point break at the identified misassembly position, splitting at 5 Kb upstream and downstream of the misassembly and (currently) excluding the misassembled region.</p>
+<p>Arguments:
+outfile: name of the new fasta file (including filepath)
+breakpoints: dictionary of misassemblies. key = contig reference ID, value = list of misassembly positions within the contig
+trim: distance, in bases, to trim from each each edge of a breakpoint to remove misassembly (integer)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.breakContigs_single">
+<tt class="descname">breakContigs_single</tt><big>(</big><em>outfile</em>, <em>breakpoints</em>, <em>trim</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.breakContigs_single"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.breakContigs_single" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to break a contigs at positions identified as assembly errors and write a new fasta file containing all contigs (both altered and unaltered).</p>
+<p>Makes a single point break at the identified misassembly position</p>
+<p>Arguments:
+outfile: name of the new fasta file (including filepath)
+breakpoints: dictionary of misassemblies. key = contig reference ID, value = list of misassembly positions within the contig
+trim: distance, in bases, to trim from each each edge of a breakpoint to remove misassembly (integer)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.get_anomalies">
+<tt class="descname">get_anomalies</tt><big>(</big><em>outfile</em>, <em>trim</em>, <em>img_name=None</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_anomalies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_anomalies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to determine the frequency of anomalous mate pair behaviour across the entire genome assembly and return a dictionary where:
+key = contig reference IDs, 
+value = list of postions within that contig where an assembly error is identified and the contig should be broken.</p>
+<p>Calls get_size_anomalies and get_mapping_anomalies for each contig larger than the aligned_assembly.min_size; makes a .csv file listing for each contig the positions of identified misassemblies and their corresponding anomalous scores.</p>
+<p>Arguments:
+outfile: name of file (including filepath) to store the list of contig misassemblies.</p>
+<p>Keyword Arguments:
+img_name: name of file (including filepath, not including filetype) to store plots of alignment quality</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.get_mapping_anomalies">
+<tt class="descname">get_mapping_anomalies</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_mapping_anomalies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_mapping_anomalies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to determine the frequency of strand mapping anomalies across the entire genome assembly.</p>
+<p>Calls get_read_mappings for each contig larger than the aligned_assembly.min_size and returns:
+1) a dictionary with keys = contig reference IDs; values = list of positions and strand alignment ratios as described in get_read_mappings   
+2) a dictionary of anomalies wiht keys = contig reference IDs, values = [list of positions for which the ratio of correctly aligned strands &lt; 0.75 (currently hard-coded), corresponding ratio of correctly aligned strands]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.get_read_mappings">
+<tt class="descname">get_read_mappings</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_read_mappings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_read_mappings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate the fraction of reads pairs within a contig that align correctly to opposite strands.</p>
+<p>Return five arrays: the positions at which strand alignment was evaluated, the fraction correctly aligned, the fraction incorrectly aligned to the same strand, the unmapped 
+fraction and the fraction that have some other alignment issue.</p>
+<p>Arguments:
+ref: the reference id of the contig to be evaulated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.get_read_size_distribution">
+<tt class="descname">get_read_size_distribution</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_read_size_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_read_size_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate global insert size distribution across the whole assembly
+Return a frequency table of insert sizes as a  dictionary with key = insert size, value = frequency</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.get_reads">
+<tt class="descname">get_reads</tt><big>(</big><em>ref</em>, <em>start</em>, <em>end</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_reads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_reads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to fetch reads aligned to a specific part of the assembled genome and return a list of aligned reads, where each list entry is a tuple:
+(read start position, read end position, read name, strand alignment) and strand alignment is a boolean indicating whether the two reads of a read pair align correctly to opposite strands.
+Reads are fetched that align to contig &#8220;ref&#8221; between positions &#8220;start&#8221; and &#8220;end&#8221;.</p>
+<p>Arguments:
+ref: the name of the contig from which aligned reads are to be fetched.
+start: the position on the contig from which to start fetching aligned reads
+end: the position on the contig from which to end fetching aligned reads</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.get_size_anomalies">
+<tt class="descname">get_size_anomalies</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_size_anomalies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_size_anomalies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to determine the frequency of insert size anomalies across the entire genome assembly.</p>
+<p>Calls probability_of_readlength for each contig larger than the aligned_assembly.min_size and returns:
+1) a dictionary with keys = contig reference IDs; values = array of Zscores as described in probability_of_readlength   
+2) a dictionary of anomalies wiht keys = contig reference IDs, values = [list of positions for which  abs(z-score) &gt; 2 (currently hard-coded), corresponding z-score value]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nxrepair.aligned_assembly.make_tree">
+<tt class="descname">make_tree</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.make_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.make_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to construct an interval tree from reads aligning to a contig and return the interval tree.</p>
+<p>The interval tree stores nodes with properties start (start postition of interval), end (end position of interval) and other,
+which is a tuple of the mate pair name (string) and the strand alignment of the two paired reads (boolean).</p>
+<p>Arguments:
+ref: Reference ID of the contig for which the interval tree is to be constructed</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Missassembly Detection with Python!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">Tutorial: Misassembly Detection using Insert Probability</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/API.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial: Misassembly Detection using Insert Probability"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Missassembly Detection with Python!"
+             >previous</a> |</li>
+        <li><a href="index.html">misassembly_detection 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Rebecca R. Murphy.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
