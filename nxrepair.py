@@ -109,12 +109,12 @@ def probability_of_readlength(read_length, mu, sigma, pi1, L):
     L: length of contig to which the reads in read_length are aligned
 
     """
-
-    p_0 = pi1 * (1 / float(L))
+    p_0 = pi1 * (1 / float(L)) # anomaly
     # probability of drawing from a gaussian with mean mu and std sigma
+    p_1 = (1 - pi1) * stats.norm.pdf(read_length, loc=mu, scale=sigma) 
+
     p_total = p_1 / (p_0 + p_1)
     return p_total
-    p_1 = (1 - pi1) * stats.norm.pdf(read_length, loc=mu, scale=sigma) 
 
 class aligned_assembly:
 
