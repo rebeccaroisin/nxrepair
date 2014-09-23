@@ -1,6 +1,6 @@
 
-Missassembly Detection With Python: API
-========================================
+NxRepair: API
+==============
 Contents:
 
 .. toctree::
