@@ -48,11 +48,10 @@ def MAD(frq):
         new_vals = [k] * int(v)
         all_lengths.extend(new_vals)
     all_lengths = np.array(sorted(all_lengths))
-    #all_lengths = np.log(all_lengths)
     mid = len(all_lengths)/2
     median = all_lengths[mid]
-    residuals = sorted(abs(all_lengths - median))
-    MAD = residuals[mid]
+    residuals = sorted(abs(all_lengths - median)) # difference between val and median
+    MAD = residuals[mid] # median of residuals
     print MAD
     return median, MAD
 
@@ -73,7 +72,7 @@ def find_intersections(tree, s, e):
 
     # find all reads that bridge a gap
     intersections = []
-    tree.intersect(s, e, lambda x: intersections.append(x))
+    tree.intersect(s, e, lambda x: intersections.append(x)) # see interval node for implementation
     return intersections
 
 def get_insertlengths(reads):
@@ -91,8 +90,8 @@ def get_insertlengths(reads):
     distances = []
     strands = []
     for read in reads:
-        distances.append(read.end - read.start)
-        strands.append(read.other[1])
+        distances.append(read.end - read.start) # insert length
+        strands.append(read.other[1]) # boolean: correct alignment
     return np.array(distances), np.array(strands)
 
 def probability_of_readlength(read_length, mu, sigma, pi1, L):
@@ -112,9 +111,10 @@ def probability_of_readlength(read_length, mu, sigma, pi1, L):
     """
 
     p_0 = pi1 * (1 / float(L))
-    p_1 = (1 - pi1) * stats.norm.pdf(read_length, loc=mu, scale=sigma)
+    # probability of drawing from a gaussian with mean mu and std sigma
     p_total = p_1 / (p_0 + p_1)
     return p_total
+    p_1 = (1 - pi1) * stats.norm.pdf(read_length, loc=mu, scale=sigma) 
 
 class aligned_assembly:
 
@@ -142,7 +142,7 @@ class aligned_assembly:
         fraction: minimum fraction of read pairs with correct orientation to call support for the assembly.
 
         """
-
+        # initialising user parameters
         self.minmapq = minmapq
         self.maxinsert = maxinsert
         self.threshold = threshold
@@ -153,9 +153,14 @@ class aligned_assembly:
         self.sam = pysam.Samfile(bamfile, "rb" )
         self.fasta = pysam.Fastafile(fastafile)
         self.min_size = min_size
+
+        # getting reads from bamfile
         self.all_reads = self.sam.fetch()
         self.references = self.sam.references
         self.lengths = self.sam.lengths
+        
+        # refdict: key=contig, val=contig length
+        # read_stock: key=contig, val=aligned reads
         self.refdict = {}
         self.read_stock = {}
         for k,v in zip(self.references,self.lengths):
@@ -175,14 +180,14 @@ class aligned_assembly:
 
         """
 
-        frq = collections.defaultdict(int)
+        frq = collections.defaultdict(int) # dictionary of insert sizes
         found = {}
         for read in self.all_reads:
+            # accept read based on mapq, contig alignemnt and insert size
             if (read.mapq > self.minmapq) and (read.rnext == read.tid) and (abs(read.tlen) < self.maxinsert):
                 if read.qname in found and found[read.qname][0]==read.tid:
                     mate = found[read.qname]
                     isize = abs(max( mate[1]+mate[2]-read.pos,read.pos+read.rlen-mate[1] ))
-                    #isize = abs(read.tlen)
                     frq[isize] += 1
                 else:
                     found[read.qname] = (read.tid,read.pos,read.rlen)
@@ -203,26 +208,29 @@ class aligned_assembly:
 
         """
 
-        # fetch all reads within a region, return those that are properly mapped
+        # fetch all reads within a region
+        # insert size: gap between end of one mate and start of next
         reads = self.sam.fetch(ref, start, end)
         read_stock = []
         found = {}
-        counter = 0
         for read in reads:
-            counter += 1
             if (read.rnext == read.tid):
-                if read.qname in found and found[read.qname][0]==read.tid: # and (abs(read.tlen) < 30000):
-                    mate = found[read.qname]
+                if read.qname in found and found[read.qname][0]==read.tid: # if mate maps to same contig
+                    mate = found[read.qname] # fetch mate
+
+                    # correctly ordering mates
                     if mate[1] > read.pos:
                         start_pos = read.pos + read.rlen
                         end_pos = mate[1]
                     else:
                         start_pos = mate[1] + mate[2]
                         end_pos = read.pos
+                    # add mates to list of mates on that contig
+                    # include strand orientation info
                     correct_strands = ((read.is_reverse) and not (read.mate_is_reverse)) or ((read.mate_is_reverse) and not (read.is_reverse))
                     read_stock.append((start_pos, end_pos, read.qname, correct_strands))
                 else:
-                    found[read.qname] = (read.tid,read.pos,read.rlen)
+                    found[read.qname] = (read.tid,read.pos,read.rlen) # haven't reached mate yet
         return read_stock
 
     def make_tree(self, ref):
@@ -268,6 +276,8 @@ class aligned_assembly:
         opp_strand = 0
         unmapped = 0
         other = 0
+
+        # arrays of read mapping behaviour
         good_ratio = []
         unmapped_ratio = []
         bad_ratio = []
@@ -275,7 +285,8 @@ class aligned_assembly:
         mini_pos = []
 
         reads = self.sam.fetch(reference = ref)
-        # not that iterating in this manner works because the bam file is sorted.
+        # note that iterating in this manner works because the bam file is sorted.
+        # create arrays containing fraction of correctly / incorrectly alinged reads
         for i, r in enumerate(reads):    
             mini_pos.append(r.pos)
             if r.mate_is_unmapped:
@@ -315,11 +326,10 @@ class aligned_assembly:
 
         """
 
-        mapping_ratios = {}
+        mapping_ratios = {} # key=contig, val=list of arrays of mapping behaviours
         anomalies = {}
         for w, (ref, length) in enumerate(self.refdict.iteritems()):
-            if length > self.min_size:
-                #if length < 1000000:
+            if length > self.min_size: # consider only big contigs
                 positions, good_ratio, bad_ratio, unmapped_ratio, other_ratio = self.get_read_mappings(ref)
                 map_criterion = good_ratio < self.fraction
                 pos_anomalies = positions[map_criterion]
@@ -347,37 +357,33 @@ class aligned_assembly:
 
         for w, (ref, length) in enumerate(self.refdict.iteritems()):
             if length > self.min_size:
-                #if length < 1000000:
-                tree = self.make_tree(ref)
+                tree = self.make_tree(ref) # build tree from all reads aligning to a contig
                 positions = np.arange(self.step, length - self.window, self.step)
                 probabilities = []
                 for pos in positions:
                     if pos % 10000 == 0:
                         print pos
-                    bridges = np.array(find_intersections(tree, pos-self.window, pos+self.window))
-                    bridge_lengths, strand_alignment = get_insertlengths(bridges)
-                    prob_lengths = probability_of_readlength(bridge_lengths, self.isize_mean, self.isize_MAD, self.prior, length)
+                    bridges = np.array(find_intersections(tree, pos-self.window, pos+self.window)) # fetch reads in windows across contig
+                    bridge_lengths, strand_alignment = get_insertlengths(bridges) # get insert sizes and mapping behaviour
+                    prob_lengths = probability_of_readlength(bridge_lengths, self.isize_mean, self.isize_MAD, self.prior, length) # get prob. insert sizes from null
                     condition = strand_alignment == 1
-                    #print condition
-                    D = np.sum(prob_lengths[condition])
-                    #D = np.sum(prob_lengths)
-                    #print "D = ", D, len(prob_lengths)#, prob_lengths
+                    D = np.sum(prob_lengths[condition]) # D is total assembly support
                     probabilities.append(D)
                     all_probabilities.append(D)
                 stock_probabilities[ref] = [positions, np.array(probabilities)]
-        p_mean = np.mean(np.array(all_probabilities))
+        p_mean = np.mean(np.array(all_probabilities)) # get contig mean and variance
         p_std = np.std(np.array(all_probabilities))
 
         for ref, [positions, probs] in stock_probabilities.iteritems():
-            zscore = (probs - p_mean) / p_std
-            #z_criterion = (zscore > 4) | (zscore < -4)
+            zscore = (probs - p_mean) / p_std # calculate position z score from contig mean, std
+            # anomalies have Zscore < Threshold.
+            # Note: threshold should be negative
             z_criterion = (zscore < self.threshold)
-            z_anomalies = zscore[z_criterion]
+            z_anomalies = zscore[z_criterion]  Note
             print ref, z_anomalies
             pos_anomalies = positions[z_criterion]
             zscores[ref] = [positions, zscore]
-            #zscores[ref] = [positions, probs]
-            anomalies[ref] = [pos_anomalies, z_anomalies]
+            anomalies[ref] = [pos_anomalies, z_anomalies] # list of anomaly locations and socres
         return zscores, anomalies, tree
 
     def get_anomalies(self, outfile, trim, img_name=None):
@@ -399,46 +405,29 @@ class aligned_assembly:
         """
 
         print "Anomaly detection"
+        # get anomaly positions
         zscores, size_anomalies, tree = self.get_size_anomalies()
         map_ratios, map_anomalies = self.get_mapping_anomalies()
-        #print size_anomalies.keys()
-        #print map_anomalies.keys(), map_anomalies.items()
 
         break_points = {}
 
         for w, (ref, [positions, probs]) in enumerate(zscores.iteritems()):
-            print "Writing D scores to file (%s)" % ref
+            # write all Z scores to a csv file
+            print "Writing Z scores to file (%s)" % ref
             for pos, prob in zip(positions, probs):
                 outfile.write("%s %s %s\n" %(ref, pos, prob))
-            z_pos, z_anomalies = size_anomalies[ref] # seems good
-            print "still good?"
+            z_pos, z_anomalies = size_anomalies[ref] 
             print "z_anomalies:", z_anomalies
             print ref, z_pos
             map_positions, good_ratio, bad_ratio, unmapped_ratio, other_ratio = map_ratios[ref] 
             pos_anomalies, map_anom = map_anomalies[ref]
 
-            #ax2 = ax1.twinx()
-            #ax2.set_xlim([0, max(map_positions)])
-            #ax2.set_ylabel("Opposite Strand")
-            #lns2 = ax2.plot(map_positions, good_ratio, c="g", label="Opposite Strands")
-            #ax2.scatter(pos_anomalies, map_anom, c="r", marker="o")
-            #ax2.set_ylim([0, 1])
-
-            #lns = lns1
-            #labs = [l.get_label() for l in lns]
-            #plt.legend(lns, labs, loc="lower right")
             anomaly_positions = sorted(z_pos.tolist())
             print ref, anomaly_positions
 
+            # make list of positions to break this contig
             break_points[ref] = []
             
-            #outfile.write("%s\n" % ref)
-            #outfile.write("Position,Zscore,Fraction Opposite\n")
-            #for p1, z1 in zip(z_pos, z_anomalies):
-            #    outfile.write("%s,%s,-\n" %(p1, z1))
-            #for p2, m in zip(pos_anomalies, map_anom):
-            #    outfile.write("%s,-,%s\n" %(p2, m))
-            #outfile.write("\n")
             if len(anomaly_positions) != 0:
                 current = []
                 for p in range(len(anomaly_positions)):
@@ -448,7 +437,6 @@ class aligned_assembly:
                     else:
                         if anom_pos - current[-1] <= trim:
                         # if anomalies are well separated flush current values to break_point
-                        #break_points[ref].append(np.mean(current))
                             current.append(anom_pos)
                         else:
                             break_points[ref].append(np.mean(current))
@@ -457,6 +445,7 @@ class aligned_assembly:
                     break_points[ref].append(np.mean(current))
                 print ref, break_points[ref]
 
+            # plot zscores and anomalies
             fig, ax1 = plt.subplots()
             plt.subplots_adjust(bottom=0.15)
             ax1.set_xlim([0, max(map_positions)])
@@ -465,66 +454,21 @@ class aligned_assembly:
             plt.tick_params(axis='both', which='major', labelsize=20)
             lns1 = ax1.plot(positions, probs, c="k", label="Support")
             #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
-            #ax1.set_xticks([0, 400000, 800000, 1200000])
             anomalies_to_plot = sorted(break_points[ref])
-            #anomalies_y = np.zeros(len(anomalies_to_plot))
             anomalies_y = [-10] * len(anomalies_to_plot)
 
             ax1.scatter(anomalies_to_plot, anomalies_y, c="r", marker = "o")
             print "anomalies", anomalies_to_plot
 
             if img_name != None:
+                # if name given, save image as .pdf and .png
                 name = img_name + "_%s.pdf" % ref
-                #name = img_name + "_%s.png" % ref 
+                plt.savefig(name)
+                name = img_name + "_%s.png" % ref
                 plt.savefig(name)
                 plt.cla()
         
         return break_points
-
-    def breakContigs_single(self, outfile, breakpoints, trim):
-
-        """
-
-        Function to break a contigs at positions identified as assembly errors and write a new fasta file containing all contigs (both altered and unaltered).
-
-        Makes a single point break at the identified misassembly position
-
-        Arguments:
-        outfile: name of the new fasta file (including filepath)
-        breakpoints: dictionary of misassemblies. key = contig reference ID, value = list of misassembly positions within the contig
-        trim: distance, in bases, to trim from each each edge of a breakpoint to remove misassembly (integer)
-
-        """
-
-        for k, v in breakpoints.iteritems():
-            print k, v
-        w = int(self.isize_mean)
-        newcontigs = []
-        for contig, length in self.refdict.iteritems():
-            dna = self.fasta[contig]
-            if contig in breakpoints:
-                splits = breakpoints[contig]
-                splits.sort()
-                prev = 0
-                for s in splits:
-                    print s
-                    print "breaking contig"
-                    if (s > trim) and ((length - s) > trim): 
-                        newcontigs.append(dna[int(prev):int(s)])
-                        prev = s
-                newcontigs.append(dna[int(prev):])
-            else:
-                newcontigs.append(dna)
-
-        newcontigs.sort(lambda x,y: cmp(len(x), len(y)),reverse=True)
-        print "Writing new fasta..."
-        for count, dna in enumerate(newcontigs):
-            name = ">CONTIG_%d_length_%d"%(count,len(dna))
-            print name
-            outfile.write(name)
-            outfile.write("\n")
-            outfile.write(dna)
-            outfile.write("\n")
 
     def breakContigs_double(self,outfile, breakpoints, trim):
 
@@ -542,30 +486,29 @@ class aligned_assembly:
         """
         
         for k, v in breakpoints.iteritems():
+            # print breakpoints
             print k, v
         newcontigs = []
         for contig, length in self.refdict.iteritems():
-            dna = self.fasta[contig]
+            dna = self.fasta[contig] # sequence of contig
             if contig in breakpoints:
                 splits = breakpoints[contig]
                 splits.sort()
                 prev = 0
-                for s in splits:
+                for s in splits: # iterate through breakpoints
                     print s
                     print "breaking contig"
-                    if (s - prev > trim) and ((length - s) > trim):
+                    if (s - prev > trim) and ((length - s) > trim): 
                         print "breaking here:", s
-                        newcontigs.append(dna[int(prev):int(s-trim)])
-                        # newcontigs.append(dna[int(s-5000):int(s+5000)])
-                        prev = s + trim
-                    #elif (s - prev >= 10000) and ((length - s) > 10000):
-                    #    prev = s + 10000 
+                        newcontigs.append(dna[int(prev):int(s-trim)]) # trim and append section before break
+                        prev = s + trim # trim other end of break
                     else:
                         print "Too small!"
                 newcontigs.append(dna[int(prev):])
             else:
                 newcontigs.append(dna)
 
+        # write new contigs to file
         newcontigs.sort(lambda x,y: cmp(len(x), len(y)),reverse=True)
         print "Writing new fasta..."
         for count, dna in enumerate(newcontigs):
@@ -577,6 +520,7 @@ class aligned_assembly:
             outfile.write("\n")    
 
 def main():
+    # read command line arguments
     import argparse
     parser = argparse.ArgumentParser(description='Routine to identify and correct large-scale misassemblies in de novo assemblies')
     parser.add_argument('bam', metavar='bam', type=str, help='bam')
@@ -597,12 +541,15 @@ def main():
 
     args = parser.parse_args()
 
+    # make assembly object
     f = aligned_assembly(args.bam, args.fasta, args.min_size, args.T, args.step_size, args.window, args.minmapq, args.maxinsert, args.fraction, args.prior)
     print "This is ok"
     
+    # find anomalies
     with open(args.outfile, "w") as of:
         bps = f.get_anomalies(of, args.trim, args.img_name)
 
+    # break contig at identifed anomalies
     with open(args.newfasta, "w") as outfasta:
         f.breakContigs_double(outfasta, bps, args.trim)
 
