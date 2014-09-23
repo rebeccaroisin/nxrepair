@@ -1,5 +1,5 @@
-Tutorial: Misassembly Detection using Insert Probability
-========================================================
+Tutorial: Misassembly Detection using NxRepair
+===============================================
 
 NxRepair is a python module that automatically detects large structural errors in de novo assemblies using Nextera mate pair reads. The decector will break a contig at the site of an identified misassembly and will generate a new fasta file containing both the corrected contigs and the correct, unaffected contigs.
 

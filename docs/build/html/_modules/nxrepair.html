@@ -50,7 +50,6 @@
 <span class="kn">import</span> <span class="nn">pysam</span>
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">from</span> <span class="nn">intervalNode</span> <span class="kn">import</span> <span class="n">IntervalNode</span>
@@ -133,7 +132,7 @@
 <span class="sd">    Function to calculate interval sizes of a set of mate pairs.</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">    reads: a list of mate pairs as bx interal tree node objects</span>
+<span class="sd">    reads: a list of mate pairs as interal tree node objects</span>
 
 <span class="sd">    Return two numpy arrays: an array of insert sizes (integers) and an array of strand alignments (boolean)  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -515,12 +514,12 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s">&#39;major&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
             <span class="n">lns1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Support&quot;</span><span class="p">)</span>
             <span class="c">#plt.ticklabel_format(style=&#39;sci&#39;, axis=&#39;x&#39;, scilimits=(0,0))</span>
-            <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">400000</span><span class="p">,</span> <span class="mi">800000</span><span class="p">,</span> <span class="mi">1200000</span><span class="p">])</span>
+            <span class="c">#ax1.set_xticks([0, 400000, 800000, 1200000])</span>
             <span class="n">anomalies_to_plot</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">break_points</span><span class="p">[</span><span class="n">ref</span><span class="p">])</span>
             <span class="c">#anomalies_y = np.zeros(len(anomalies_to_plot))</span>
-            <span class="n">anomalies_y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">anomalies_to_plot</span><span class="p">)</span>
+            <span class="n">anomalies_y</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">anomalies_to_plot</span><span class="p">)</span>
 
-            <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">anomalies_to_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">anomalies_y</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s">&quot;r&quot;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&quot;o&quot;</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">anomalies_to_plot</span><span class="p">,</span> <span class="n">anomalies_y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&quot;r&quot;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&quot;o&quot;</span><span class="p">)</span>
             <span class="k">print</span> <span class="s">&quot;anomalies&quot;</span><span class="p">,</span> <span class="n">anomalies_to_plot</span>
 
             <span class="k">if</span> <span class="n">img_name</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
