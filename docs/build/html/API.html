@@ -75,17 +75,6 @@ trim: distance, in bases, to trim from each each edge of a breakpoint to remove 
 </dd></dl>
 
 <dl class="method">
-<dt id="nxrepair.aligned_assembly.breakContigs_single">
-<tt class="descname">breakContigs_single</tt><big>(</big><em>outfile</em>, <em>breakpoints</em>, <em>trim</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.breakContigs_single"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.breakContigs_single" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to break a contigs at positions identified as assembly errors and write a new fasta file containing all contigs (both altered and unaltered).</p>
-<p>Makes a single point break at the identified misassembly position</p>
-<p>Arguments:
-outfile: name of the new fasta file (including filepath)
-breakpoints: dictionary of misassemblies. key = contig reference ID, value = list of misassembly positions within the contig
-trim: distance, in bases, to trim from each each edge of a breakpoint to remove misassembly (integer)</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="nxrepair.aligned_assembly.get_anomalies">
 <tt class="descname">get_anomalies</tt><big>(</big><em>outfile</em>, <em>trim</em>, <em>img_name=None</em><big>)</big><a class="reference internal" href="_modules/nxrepair.html#aligned_assembly.get_anomalies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nxrepair.aligned_assembly.get_anomalies" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to determine the frequency of anomalous mate pair behaviour across the entire genome assembly and return a dictionary where:

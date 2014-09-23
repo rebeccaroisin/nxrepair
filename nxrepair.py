@@ -379,7 +379,7 @@ class aligned_assembly:
             # anomalies have Zscore < Threshold.
             # Note: threshold should be negative
             z_criterion = (zscore < self.threshold)
-            z_anomalies = zscore[z_criterion]  Note
+            z_anomalies = zscore[z_criterion]
             print ref, z_anomalies
             pos_anomalies = positions[z_criterion]
             zscores[ref] = [positions, zscore]
