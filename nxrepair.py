@@ -1,5 +1,30 @@
+# Copyright (c) 2014, rebeccaroisin
+# All rights reserved.
+
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import pysam
 import collections
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
@@ -410,6 +435,22 @@ class aligned_assembly:
         map_ratios, map_anomalies = self.get_mapping_anomalies()
 
         break_points = {}
+
+        # # make a wiggle file
+        # print "Writing wiggle file"
+        # wig_file = "%s.wig" % ("/media/rmurphy/sandbox/bash_scripts/test_TB")
+        # with open(wig_file, "w") as wig:
+        #     #wig.write("track type=wiggle_0 graphType=line color=0,0,255 altColor=255,0,0 name='Zscore' graphType=heatmap midRange=35:65 midColor=0,255,0\n")
+        #     for ref, [positions, probs] in zscores.iteritems():
+        #         print ref
+        #         wig.write("fixedStep chrom=%s start=%s step=%s span=%s\n" % (ref, 1, self.step, 1)) 
+        #         #print zscores[ref]
+        #         #for vals in zscores[ref]:
+        #         #    positions = vals[0]
+        #         #    probs = vals[1]
+        #         for prob in probs:
+        #             wig.write("%s\n" % (prob))
+        #         wig.write("\n")
 
         for w, (ref, [positions, probs]) in enumerate(zscores.iteritems()):
             # write all Z scores to a csv file
