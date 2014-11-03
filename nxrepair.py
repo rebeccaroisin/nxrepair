@@ -30,31 +30,6 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from intervalNode import IntervalNode
 
-# Copyright (c) 2014, rebeccaroisin
-# All rights reserved.
-
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-
-# * Redistributions of source code must retain the above copyright notice, this
-#   list of conditions and the following disclaimer.
-
-# * Redistributions in binary form must reproduce the above copyright notice,
-#   this list of conditions and the following disclaimer in the documentation
-#   and/or other materials provided with the distribution.
-
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
 def meansd(frq):
 
     """
@@ -216,8 +191,9 @@ class aligned_assembly:
             self.refdict[k]=v
             self.read_stock[k] = self.get_reads(k, 0, v) 
         self.sizes = self.get_read_size_distribution()
-        self.isize_mean, self.isize_sd = meansd(self.sizes)
         self.isize_median, self.isize_MAD = MAD(self.sizes)
+        self.isize_mean, _ = meansd(self.sizes)
+        self.isize_sd = 1.4826 * self.isize_MAD
         print self.isize_sd, self.isize_MAD
 
     def get_read_size_distribution(self):
@@ -415,7 +391,7 @@ class aligned_assembly:
                         print pos
                     bridges = np.array(find_intersections(tree, pos-self.window, pos+self.window)) # fetch reads in windows across contig
                     bridge_lengths, strand_alignment = get_insertlengths(bridges) # get insert sizes and mapping behaviour
-                    prob_lengths = probability_of_readlength(bridge_lengths, self.isize_mean, self.isize_MAD, self.prior, length) # get prob. insert sizes from null
+                    prob_lengths = probability_of_readlength(bridge_lengths, self.isize_mean, self.isize_sd, self.prior, length) # get prob. insert sizes from null
                     condition = strand_alignment == 1
                     D = np.sum(prob_lengths[condition]) # D is total assembly support
                     probabilities.append(D)
