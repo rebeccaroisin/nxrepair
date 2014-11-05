@@ -532,7 +532,8 @@ class aligned_assembly:
             print k, v
         newcontigs = []
         for contig, length in self.refdict.iteritems():
-            dna = self.fasta[contig] # sequence of contig
+            #dna = self.fasta[contig] # sequence of contig
+            dna = self.fasta.fetch(reference=contig) # sequence of contig
             if contig in breakpoints:
                 splits = breakpoints[contig]
                 splits.sort()
