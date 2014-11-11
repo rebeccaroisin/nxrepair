@@ -194,7 +194,7 @@ class aligned_assembly:
         self.isize_median, self.isize_MAD = MAD(self.sizes)
         self.isize_mean, _ = meansd(self.sizes)
         self.isize_sd = 1.4826 * self.isize_MAD
-        print self.isize_sd, self.isize_MAD
+        print self.isize_sd, self.isize_MAD, 1.4826 * self.isize_MAD
 
     def get_read_size_distribution(self):
 
@@ -572,7 +572,7 @@ def main():
     parser.add_argument('newfasta', metavar='newfasta', type=str, help='Fasta file for new contigs, including filepath')
     parser.add_argument('-min_size', metavar='min_size', type=int, default=10000, help='Minimum contig size to analyse')
     parser.add_argument('-img_name', metavar ='img_name', type=str, default=None, help='Name under which to save (optional) graphs of alignment quality. Default value: None (no graphs produced)')
-    parser.add_argument('-trim', metavar ='trim', type=int, default=5000, help='Number of bases to trim from each side of an identified misassembly. Default value: 5000')
+    parser.add_argument('-trim', metavar ='trim', type=int, default=4000, help='Number of bases to trim from each side of an identified misassembly. Default value: 5000')
     parser.add_argument('-T', metavar ='T', type=float, default= -4.0, help='Threshold in Z score below which a misassembly is called. Default value: -4.0')
     parser.add_argument('-step_size', metavar ='step_size', type=int, default=1000, help='Step-size in bases to traverse contigs. Default value: 1000')
     parser.add_argument('-window', metavar ='window', type=int, default=200, help='Window size across which bridging mate pairs are evaluated. Default value: 200')
