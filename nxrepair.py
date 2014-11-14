@@ -487,22 +487,22 @@ class aligned_assembly:
                     break_points[ref].append(np.mean(current))
                 print ref, break_points[ref]
 
-            # plot zscores and anomalies
-            fig, ax1 = plt.subplots()
-            plt.subplots_adjust(bottom=0.15)
-            ax1.set_xlim([0, max(map_positions)])
-            ax1.set_xlabel("Position",size=24)
-            ax1.set_ylabel("Assembly Support", size=24)
-            plt.tick_params(axis='both', which='major', labelsize=20)
-            lns1 = ax1.plot(positions, probs, c="k", label="Support")
-            #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
-            anomalies_to_plot = sorted(break_points[ref])
-            anomalies_y = [-10] * len(anomalies_to_plot)
-
-            ax1.scatter(anomalies_to_plot, anomalies_y, c="r", marker = "o")
-            print "anomalies", anomalies_to_plot
-
             if img_name != None:
+                # plot zscores and anomalies
+                fig, ax1 = plt.subplots()
+                plt.subplots_adjust(bottom=0.15)
+                ax1.set_xlim([0, max(map_positions)])
+                ax1.set_xlabel("Position",size=24)
+                ax1.set_ylabel("Assembly Support", size=24)
+                plt.tick_params(axis='both', which='major', labelsize=20)
+                lns1 = ax1.plot(positions, probs, c="k", label="Support")
+                #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+                anomalies_to_plot = sorted(break_points[ref])
+                anomalies_y = [-10] * len(anomalies_to_plot)
+
+                ax1.scatter(anomalies_to_plot, anomalies_y, c="r", marker = "o")
+                print "anomalies", anomalies_to_plot
+
                 # if name given, save image as .pdf and .png
                 name = img_name + "_%s.pdf" % ref
                 plt.savefig(name)
