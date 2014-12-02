@@ -1,0 +1,103 @@
+\begin{thebibliography}{10}
+
+\bibitem{Bradnam2013}
+K.R. Bradnam, J.~N. Fass, A.~Alexandrov, P.~Baranay, M.~Bechner, I.~Birol,
+  S.~Boisvert, J.~A. Chapman, G.~Chapuis, R.~Chikhi, H.~Chitsaz, W.~C. Chou,
+  J.~Corbeil, C.~Del~Fabbro, T.~R. Docking, R.~Durbin, Earl D., S.~Emrich,
+  P.~Fedotov, N.~A. Fonseca, G.~Ganapathy, R.~A. Gibbs, S.~Gnerre,
+  E.~Godzaridis, S.~Goldstein, M.~Haimel, G.~Hall, D.~Haussler, J.~B. Hiatt,
+  I.~Y. Ho, J.~Howard, M.~Hunt, S.~D.. Jackman, D.~B. Jaffe, E.~D. Jarvis,
+  H.~Jiang, S.~Kazakov, P.~J. Kersey, J.O. Kitzman, J.R. Knight, S.~Koren,
+  T.~W. Lam, D.~Lavenier, F.~Laviolette, Y.~Li, Z.~Li, B.~Liu, Y.~Liu, R.~Luo,
+  I.~Maccallum, M.D. Macmanes, N.~Maillet, S.~Melnikov, D.~Naquin, Z.~Ning,
+  T.~D. Otto, B.~Paten, O.S. Paulo, A.~M. Phillippy, F.~Pina-Martins, M.~Place,
+  D.~Przybylski, X.~Qin, C.~Qu, F.~J. Ribeiro, S.~Richards, D.~S. Rokhsar,
+  J.~G. Ruby, S.~Scalabrin, M.~C. Schatz, D.~C. Schwartz, A.~Sergushichev,
+  T.~Sharpe, T.~I. Shaw, J.~Shendure, Y.~Shi, J.~T. Simpson, H.~Song,
+  F.~Tsarev, F.~Vezzi, R.~Vicedomini, B.~M. Vieira, J.~Wang, K.~C. Worley,
+  S.~Yin, S.~M. Yiu, J.~Yuan, G.~Zhang, H.~Zhang, S.~Zhou, and I.~F. Korf.
+\newblock Assemblathon 2: evaluating de novo methods of genome assembly in
+  three vertebrate species.
+\newblock {\em Gigascience}, 2(1):10, 2013.
+
+\bibitem{Salzberg2012}
+S.~L. Salzberg, A.~M. Phillippy, A.~Zimin, D.~Puiu, T.~Magoc, S.~Koren, T.~J.
+  Treangen, M.~C. Schatz, A.~L. Delcher, M.~Roberts, G.~Marçais, M.~Pop, and
+  J.~A. Yorke.
+\newblock Gage: A critical evaluation of genome assemblies and assembly
+  algorithms.
+\newblock {\em Genome Res.}, 22(3):557--567, 2012.
+
+\bibitem{Ghodsi2013}
+M.~Ghodsi, C.~M. Hill, I.~Astrovskaya, H.~Lin, and D.~D. Sommer.
+\newblock Se novo likelihood-based measures for comparing genome assemblies.
+\newblock {\em BMC Research Notes}, 6:334, 2013.
+
+\bibitem{Coil2014}
+D.~Coil, G.~Jospin, and A.~E. Darling.
+\newblock A5-miseq: an updated pipeline to assemble microbial genomes from
+  illumina miseq data.
+\newblock 2014.
+
+\bibitem{Hunt2013}
+M.~Hunt, T.~Kikuchi, M.~Sanders, C.~Newbold, M.~Berriman, and T.~D. Otto.
+\newblock Reapr: a universal tool for genome assembly evaluation.
+\newblock {\em Genome Biol.}, 14:R47, 2013.
+
+\bibitem{Clark2013}
+S.~C. Clark, R.~Egan, P.~I. Frazier, and Z.~Wang.
+\newblock Ale: a generic assembly likelihood evaluation framework for asessing
+  the accuracy of genome and metagenome assemblies.
+\newblock {\em Bioinformatics}, 29(4):435--443, 2013.
+
+\bibitem{pilon2014}
+B.~Walker.
+\newblock Pilon.
+\newblock \url{https://github.com/broadinstitute/pilon/releases}, 2014.
+
+\bibitem{Bankevich2012}
+A.~Bankevich, S.~Nurk, D.~Antipov, A.~A. Gurevich, M.~Dvorkin, A.~S. Kulikov,
+  V.~M. Lesin, S.~I. Nikolenko, S.~Pham, A.~D. Prjibelski, A.~V. Pyshkin, A.~V.
+  Sirotkin, N.~Vyahhi, G.~Tesler, M.~A. Alekseyev, and P.~A. Pevzner.
+\newblock Spades: A new genome assembly algorithm and its applications to
+  single-cell sequencing.
+\newblock {\em J. Comp. Biol.}, 19(5):455--477, 2012.
+
+\bibitem{gurevich2013}
+A.~Gurevich, V.~Saveliev, N.~Vyahhi, and G.~Tesler.
+\newblock Quast: quality assessment tool for genome assemblies.
+\newblock {\em Bioinformatics}, 29(8):1072--1075, 2013.
+
+\bibitem{li2013}
+H.~Li.
+\newblock Aligning sequence reads, clone sequences and assembly contigs with
+  bwa-mem.
+\newblock 2013.
+
+\bibitem{li2009}
+H.~Li, B.~Handsaker, A.~Wysoker, T.~Fennell, J.~Ruan, N.~Homer, G.~Marth,
+  G.~Abecasis, R.~Durbin, and 1000 Genome Project Data~Processing Subgroup.
+\newblock The sequence alignment/map format and samtools.
+\newblock {\em Bioinformatics}, 25(16):2078--2079, 2009.
+
+\bibitem{cormen2009}
+T.~H. Cormen, C.~E. Leiserson, R.~L. Rivest, and C.~Stein.
+\newblock {\em Introduction to Algorithms}.
+\newblock MIT Press and McGraw-Hill, 2009.
+
+\bibitem{numpy}
+S.~van~der Walt, S.~C. Colbert, and G.~Varoquaux.
+\newblock The numpy array: A structure for efficient numerical computation.
+\newblock {\em Computing in Science and Engineering}, 13:22--30, 2011.
+
+\bibitem{scipy}
+K.~J. Millman and M.~Aivazis.
+\newblock Python for scientists and engineers.
+\newblock {\em Computing in Science and Engineering}, 13:9--12, 2011.
+
+\bibitem{Hunter2007}
+J.~D. Hunter.
+\newblock Matplotlib: A 2d graphics environment.
+\newblock {\em Computing In Science and Engineering}, 9(3):90--95, 2007.
+
+\end{thebibliography}
