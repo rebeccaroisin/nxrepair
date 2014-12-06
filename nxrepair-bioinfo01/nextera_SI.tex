@@ -232,7 +232,7 @@ The ROC plots are shown in Supp. Figure~\ref{fig:ROCs}.
 \caption{ROC plots for each of the seven genomes evaluated here.\label{fig:ROCs}}
 \end{figure}
 
-Finally, we plotted the NGA50 value as calculated by QUAST against the NA50, before and after NxRepair correction, to demonstrate that we have not reduced the assembly quality. This is shown in Supp. Figure~\ref{fig:NGA50}.
+Finally, we plotted the NGA50 value as calculated by QUAST against the NA50, before and after NxRepair correction, to demonstrate that we have not reduced the assembly quality. This is shown in Supp. Figure~\ref{fig:NGA50}. We note that in the case of the TB genome, the NGA50 was reduced by NxRepair correction. Manual inspection of the correction sites revealed that one of the misassemblies reported by nxrepair was a join between two contigs which consisted of a gap of over 2 Kb bridged by very few mate pairs. This join is reported as correct by Quast, but has only very little support from the read data.
 
 \begin{figure}
 \centerline{\includegraphics[width=0.8\textwidth]{ng50.pdf}}
