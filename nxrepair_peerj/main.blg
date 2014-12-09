@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: main.aux
+The style file: apalike.bst
+Case mismatch error between cite keys Bankevich2012 and bankevich2012
+---line 47 of file main.aux
+ : \citation{Bankevich2012
+ :                        }
+I'm skipping whatever remains of this command
+Database file #1: detecting_large_missassemblies.bib
+Warning--empty journal in Coil2014
+Warning--empty journal in li2013
+You've used 17 entries,
+            1935 wiz_defined-function locations,
+            575 strings with 8063 characters,
+and the built_in function-call counts, 10364 in all, are:
+= -- 885
+> -- 893
+< -- 5
++ -- 342
+- -- 338
+* -- 1073
+:= -- 1906
+add.period$ -- 49
+call.type$ -- 17
+change.case$ -- 253
+chr.to.int$ -- 17
+cite$ -- 19
+duplicate$ -- 232
+empty$ -- 448
+format.name$ -- 359
+if$ -- 1856
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 17
+newline$ -- 86
+num.names$ -- 51
+pop$ -- 228
+preamble$ -- 1
+purify$ -- 254
+quote$ -- 0
+skip$ -- 173
+stack$ -- 0
+substring$ -- 473
+swap$ -- 14
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 100
+warning$ -- 2
+while$ -- 57
+width$ -- 0
+write$ -- 215
+(There was 1 error message)
