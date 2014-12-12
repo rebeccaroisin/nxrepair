@@ -90,61 +90,6 @@ z_l = \frac{D_l - \hat{\mu}_D}{s_D}
 
 A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (default value -4). This threshold describes the number of standard deviations below the mean assembly support that is required to identify an anomaly. The default value of -4 will flag only positions whose assembly support is less than four standard deviations below the mean level of support. As the parameters of the distribution are derived from the properties of the assembly, this is robust to variation in coverage, contig size and other assembly properties.
 
-\begin{table}[h]
-  \centering
-\resizebox{\textwidth}{!}{
-  \begin{tabular}{ll}
-    \hline
-    \textbf{Abbreviation:}             &    Bcer \\
-    \textbf{Bacteria:}                 &    \emph{Bacillus cereus ATCC 10987} \\
-    \textbf{Accession ID:}  &  NC\_003909, NC\_005707 \\ 
-    \textbf{NCBI FTP:}                 &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Bacillus\_cereus\_ATCC\_10987\_uid57673/} \\
-    \hline
-    \textbf{Abbreviation:}             &    EcDH \\ 
-    \textbf{Bacteria:}                 &    \emph{Escherichia coli str. K-12 substr. DH10B}\\ 
-    \textbf{Accession ID:}              &    NC\_010473 \\ 
-    \textbf{NCBI FTP:}     &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_DH10B\_uid58979/}\\
-    \hline
-    \textbf{Abbreviation:}             &   EcMG \\
-    \textbf{Bacteria:}                 & \emph{Escherichia coli str. K-12 substr. MG1655}\\
-    \textbf{Accession ID:}            & NC\_000913    \\ 
-    \textbf{NCBI FTP:}       & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_MG1655\_uid57779/}\\
-    \hline
-    \textbf{Abbreviation:}             &   list\\ 
-    \textbf{Bacteria:}                 &\emph{Listeria monocytogenes}\\  
-\textbf{Accession ID:}              & NC\_003210 \\ 
-\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Listeria\_monocytogenes\_EGD\_e\_uid61583/}\\
-\hline
-\textbf{Abbreviation:}             &  meio \\ 
-\textbf{Bacteria:}                 &\emph{Meiothermus ruber DSM 1279}\\ 
-\textbf{Accession ID:}             &NC\_013946 \\ 
-\textbf{NCBI FTP:}      & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Meiothermus\_ruber\_DSM\_1279\_uid46661/}\\
-   \hline
-\textbf{Abbreviation:}             &  ped \\
-\textbf{Bacteria:}                 &\emph{Pedobacter heparinus DSM 2366}\\
-\textbf{Accession ID:}                 & NC\_013061 \\ 
-\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Pedobacter\_heparinus\_DSM\_2366\_uid59111/}\\
-   \hline
-\textbf{Abbreviation:}             &   pneu \\
-\textbf{Bacteria:}                 & \emph{Klebsiella pneumoniae subsp. pneumoniae MGH 78578}  \\
-\textbf{Accession ID:}              & NC\_009648, NC\_009649, NC\_009650, NC\_009651, NC\_009652, NC\_009653 \\ 
-\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Klebsiella\_pneumoniae\_MGH\_78578\_uid57619/}\\
-   \hline
-\textbf{Abbreviation:}             &  rhod \\ 
-\textbf{Bacteria:}                 &\emph{Rhodobacter sphaeroides 2.4.1}\\ 
-\textbf{Accession ID:}                 &NC\_007488, NC\_007489, NC\_007490, NC\_007493, NC\_007494, NC\_009007, NC\_009008\\ 
-\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Rhodobacter\_sphaeroides\_2\_4\_1\_uid57653/}\\ 
-   \hline
-\textbf{Abbreviation:}             &  TB \\
-\textbf{Bacteria:}                 & \emph{Mycobacterium tuberculosis H37Ra}\\ 
-\textbf{Accession ID:}               &NC\_009525 \\ 
-\textbf{NCBI FTP:}    & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Mycobacterium\_tuberculosis\_H37Ra\_uid58853/}\\ 
-   \hline
-  \end{tabular}
-}
-  \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).\label{data-description}}
-\end{table}
-
 \subsection*{Global Assembly Parameters}
 NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the de novo assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation, pairs whose mapping quality falls below a user specified threshold, and pairs whose insert size exceed 30 Kb (approximately 10 times the mean insert size). The global mean $\hat{\mu}$ and median absolute deviation $\text{MAD}$ are calculated across all contigs in the assembly as:
 
@@ -321,6 +266,61 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
 \end{tabular}
 \end{center}
 \caption{NxRepair performance analysis. \label{tab:performance}}
+\end{table}
+
+\begin{table}[h]
+  \centering
+\resizebox{\textwidth}{!}{
+  \begin{tabular}{ll}
+    \hline
+    \textbf{Abbreviation:}             &    Bcer \\
+    \textbf{Bacteria:}                 &    \emph{Bacillus cereus ATCC 10987} \\
+    \textbf{Accession ID:}  &  NC\_003909, NC\_005707 \\ 
+    \textbf{NCBI FTP:}                 &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Bacillus\_cereus\_ATCC\_10987\_uid57673/} \\
+    \hline
+    \textbf{Abbreviation:}             &    EcDH \\ 
+    \textbf{Bacteria:}                 &    \emph{Escherichia coli str. K-12 substr. DH10B}\\ 
+    \textbf{Accession ID:}              &    NC\_010473 \\ 
+    \textbf{NCBI FTP:}     &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_DH10B\_uid58979/}\\
+    \hline
+    \textbf{Abbreviation:}             &   EcMG \\
+    \textbf{Bacteria:}                 & \emph{Escherichia coli str. K-12 substr. MG1655}\\
+    \textbf{Accession ID:}            & NC\_000913    \\ 
+    \textbf{NCBI FTP:}       & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_MG1655\_uid57779/}\\
+    \hline
+    \textbf{Abbreviation:}             &   list\\ 
+    \textbf{Bacteria:}                 &\emph{Listeria monocytogenes}\\  
+\textbf{Accession ID:}              & NC\_003210 \\ 
+\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Listeria\_monocytogenes\_EGD\_e\_uid61583/}\\
+\hline
+\textbf{Abbreviation:}             &  meio \\ 
+\textbf{Bacteria:}                 &\emph{Meiothermus ruber DSM 1279}\\ 
+\textbf{Accession ID:}             &NC\_013946 \\ 
+\textbf{NCBI FTP:}      & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Meiothermus\_ruber\_DSM\_1279\_uid46661/}\\
+   \hline
+\textbf{Abbreviation:}             &  ped \\
+\textbf{Bacteria:}                 &\emph{Pedobacter heparinus DSM 2366}\\
+\textbf{Accession ID:}                 & NC\_013061 \\ 
+\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Pedobacter\_heparinus\_DSM\_2366\_uid59111/}\\
+   \hline
+\textbf{Abbreviation:}             &   pneu \\
+\textbf{Bacteria:}                 & \emph{Klebsiella pneumoniae subsp. pneumoniae MGH 78578}  \\
+\textbf{Accession ID:}              & NC\_009648, NC\_009649, NC\_009650, NC\_009651, NC\_009652, NC\_009653 \\ 
+\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Klebsiella\_pneumoniae\_MGH\_78578\_uid57619/}\\
+   \hline
+\textbf{Abbreviation:}             &  rhod \\ 
+\textbf{Bacteria:}                 &\emph{Rhodobacter sphaeroides 2.4.1}\\ 
+\textbf{Accession ID:}                 &NC\_007488, NC\_007489, NC\_007490, NC\_007493, NC\_007494, NC\_009007, NC\_009008\\ 
+\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Rhodobacter\_sphaeroides\_2\_4\_1\_uid57653/}\\ 
+   \hline
+\textbf{Abbreviation:}             &  TB \\
+\textbf{Bacteria:}                 & \emph{Mycobacterium tuberculosis H37Ra}\\ 
+\textbf{Accession ID:}               &NC\_009525 \\ 
+\textbf{NCBI FTP:}    & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Mycobacterium\_tuberculosis\_H37Ra\_uid58853/}\\ 
+   \hline
+  \end{tabular}
+}
+  \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).\label{data-description}}
 \end{table}
 
 \section*{Conclusions}
