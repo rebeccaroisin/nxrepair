@@ -212,8 +212,10 @@ TB & 70 & 184170 & 66 & 158885 \\\hline
 \caption{Number of large misassemblies and NGA50 as reported by QUAST before and after NxRepair correction. \label{tab:improvement}}
 \end{table}  
 
-\subsection*{Performance Evaluation}
-\subsubsection*{Preparation of ROC Plots}
+\subsection*{Performance Optimisation}
+\subsubsection*{ROC Plots}
+To optimimse the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
+
 As misassemblies are identified as point errors, but NxRepair identifies the region spanned by a misassembly, we needed a method to correctly compare the sites of true misassemblies with those identified by NxRepair. To make this comparison, we divided each contig of the assembly into short stretches of 1 Kb length. We then prepared an array, $A_{Nx}$ of size $\frac{L}{1000}$ for contig length $L$, corresponding to misassemblies identified by NxRepair. $A_{Nx}$ was filled as follows:
 
 \begin{equation}
@@ -230,7 +232,14 @@ To prepare the ROCs each position $i$ in $A_{Nx}$ was labeled as true positive (
 \begin{equation}
 \text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}} \qquad \text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}
 \label{eq:tpr}
-\end{equation} 
+\end{equation}
+
+Based on the resultant ROC plots, shown in Figure~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to optimise the true positive: false positive ratio. This threshld was used for all subsequent analyses. 
+
+\begin{figure}
+\centerline{\includegraphics[width=0.8\textwidth]{allROC_extensive.pdf}}
+\caption{ROC plots for each of the seven genomes evaluated.\label{fig:ROCs}}
+\end{figure}
 
 \subsubsection*{Profiling}
 Performance analysis was performed on a single core with 8 GB RAM available. Runtime analysis was performed using the python cProfile module. The memoryprofiler python module was used to analyse memory usage.
@@ -282,16 +291,7 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 
 
 \section*{Results and Discussion}
-We used NxRepair to correct de novo assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for five genomes, two of which contained no large errors, no errors were found and the assembly was unchanged.
-
-To evaluate the performance of NxRepair, we prepared Receiver Operating Curves (ROCs) for each bacterial genome, evaluated at a range of different thresholds as described above. 
-
-The ROC plots, shown in Figure~\ref{fig:ROCs}, show that for six of the seven genomes containing misassemblies, NxRepair improves the assembly, as misassemblies can be identified correctly with no false positive calls.
-
-\begin{figure}
-\centerline{\includegraphics[width=0.8\textwidth]{allROC_extensive.pdf}}
-\caption{ROC plots for each of the seven genomes evaluated.\label{fig:ROCs}}
-\end{figure}
+We used NxRepair to correct de novo assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for five genomes, two of which contained no large errors, no errors were found and the assembly was unchanged.
 
 Finally, we plotted the NGA50 value as calculated by QUAST against the NA50, before and after NxRepair correction, to demonstrate that we have not reduced the assembly quality. This is shown in Figure~\ref{fig:NGA50}. We note that in the case of the TB genome, the NGA50 was slightly reduced by NxRepair correction. Manual inspection of the correction sites revealed that one of the misassemblies reported by nxrepair was a join between two contigs which consisted of a gap of over 2 Kb bridged by very few mate pairs. This join is reported as correct by Quast, but has only little support from the read data. We fail to correct some misassemblies because they do not exhibit a signal given the wide insert size distribution of the Nextera mate pairs.
 
