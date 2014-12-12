@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.1.23)  9 DEC 2014 17:05
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2013.1.23)  12 DEC 2014 13:41
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -899,11 +899,6 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/it' in size <9> not available
 LaTeX Font Info:    Font shape `OT1/phv/b/it' in size <9> not available
 (Font)              Font shape `OT1/phv/b/sl' tried instead on input line 216.
 [5]
-
-Package natbib Warning: Citation `Bankevich2012' on page 6 undefined on input l
-ine 239.
-
-
 Overfull \hbox (10.87428pt too wide) in paragraph at lines 251--252
 []\OT1/pcr/m/n/10 bwa mem sample/scaffolds.fasta -p bacteria.fastq.gz | samtool
 s view -bS
@@ -915,47 +910,47 @@ Overfull \hbox (2.17429pt too wide) in paragraph at lines 257--258
 scores.csv
  []
 
-[6] <allROC_extensive.pdf, id=1435, 578.16pt x 433.62pt>
+[6] <allROC_extensive.pdf, id=1437, 578.16pt x 433.62pt>
 File: allROC_extensive.pdf Graphic file (type pdf)
 
-<use allROC_extensive.pdf> <ng50.pdf, id=1438, 578.16pt x 433.62pt>
+<use allROC_extensive.pdf> <ng50.pdf, id=1440, 578.16pt x 433.62pt>
 File: ng50.pdf Graphic file (type pdf)
 
-<use ng50.pdf> [7] [8 <./allROC_extensive.pdf> <./ng50.pdf>] (./main.bbl
+<use ng50.pdf>
+Underfull \vbox (badness 1571) has occurred while \output is active []
+
+ [7]
+[8 <./allROC_extensive.pdf> <./ng50.pdf>] (./main.bbl
 Overfull \hbox (0.76274pt too wide) in paragraph at lines 34--38
 \OT1/ptm/m/n/10 (-20) framework for asessing the accuracy of genome and metagen
 ome assemblies.  \OT1/ptm/m/it/10 (-20) Bioinformatics\OT1/ptm/m/n/10 (-20) , 2
 9(4):435--
  []
 
-[9])
-
-Package natbib Warning: There were undefined citations.
-
-AED: lastpage setting LastPage [10] (./main.aux) ) 
+[9]) AED: lastpage setting LastPage [10] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 11877 strings out of 495061
- 171141 string characters out of 1182621
- 387066 words of memory out of 3000000
- 14595 multiletter control sequences out of 15000+50000
- 63049 words of font info for 233 fonts, out of 3000000 for 9000
+ 11869 strings out of 495061
+ 171063 string characters out of 1182621
+ 386999 words of memory out of 3000000
+ 14594 multiletter control sequences out of 15000+50000
+ 62754 words of font info for 228 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 43i,14n,45p,1104b,453s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fon
-ts/enc/dvips/base/8r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfonts/
-cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.p
-fb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-te
-xlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/
-urw/helvetic/uhvb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/helvetic/uhvb
-o8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/sha
-re/texmf-texlive/fonts/type1/urw/symbol/usyr.pfb></usr/share/texmf-texlive/font
-s/type1/urw/symbol/usyr.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utm
-b8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/
-texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (10 pages, 444244 bytes).
+ 43i,14n,45p,1104b,455s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf-texliv
+e/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsf
+onts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmm
+i10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/tex
+mf-texlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/t
+ype1/urw/helvetic/uhvb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/helvetic
+/uhvbo8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></us
+r/share/texmf-texlive/fonts/type1/urw/symbol/usyr.pfb></usr/share/texmf-texlive
+/fonts/type1/urw/symbol/usyr.pfb></usr/share/texmf-texlive/fonts/type1/urw/time
+s/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/s
+hare/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (10 pages, 443956 bytes).
 PDF statistics:
- 1590 PDF objects out of 1728 (max. 8388607)
+ 1592 PDF objects out of 1728 (max. 8388607)
  44 named destinations out of 1000 (max. 500000)
  43544 words of extra memory for PDF output out of 51595 (max. 10000000)
 
