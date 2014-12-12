@@ -301,7 +301,7 @@ Finally, we plotted the NGA50 value as calculated by QUAST against the NA50, bef
 \end{figure}
 
 \subsection*{Performance}
-We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree constructed is on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
+We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
 
 \begin{table}
 \begin{center}
