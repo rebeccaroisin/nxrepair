@@ -55,7 +55,7 @@ To calculate the degree of support for the assembly at each site across a contig
 \label{eq:posterior}  
 \end{eqnarray}
 
-where $Y_l$ is the insert size of read pair $l$, $\pi_x$ is the user defined prior probability of class $x$ and $\pi_1 + \pi_0 = 1$. The default value of $\pi_0$ is 0.01 (see table~\ref{tab:parameters}), meaning that in the absence of any insert size information, 99 \% of read pairs are expected to arise from the null distribution.  
+where $Y_l$ is the insert size of read pair $l$, $\pi_x$ is the user defined prior probability of class $x$ and $\pi_1 + \pi_0 = 1$. The default value of $\pi_0$ is 0.01 (see Table~\ref{tab:parameters}), meaning that in the absence of any insert size information, 99 \% of read pairs are expected to arise from the null distribution.  
 
 Within each window, the total support for a correct assembly at position $i$ can be calculated as:
 
@@ -159,7 +159,7 @@ TB & 70 & 184170 & 66 & 158885 \\\hline
 
 \subsection*{Performance Optimisation}
 \subsubsection*{ROC Plots}
-To optimimse the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
+To optimise the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
 
 As misassemblies are identified as point errors, but NxRepair identifies the region spanned by a misassembly, we needed a method to correctly compare the sites of true misassemblies with those identified by NxRepair. To make this comparison, we divided each contig of the assembly into short stretches of 1 Kb length. We then prepared an array, $A_{Nx}$ of size $\frac{L}{1000}$ for contig length $L$, corresponding to misassemblies identified by NxRepair. $A_{Nx}$ was filled as follows:
 
@@ -179,7 +179,7 @@ To prepare the ROCs each position $i$ in $A_{Nx}$ was labeled as true positive (
 \label{eq:tpr}
 \end{equation}
 
-Based on the resultant ROC plots, shown in Figure~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to optimise the true positive: false positive ratio. This threshld was used for all subsequent analyses. 
+Based on the resultant ROC plots, shown in Figure~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to optimise the true positive: false positive ratio. This threshold was used for all subsequent analyses. 
 
 \begin{figure}
 \centerline{\includegraphics[width=0.8\textwidth]{allROC_extensive.pdf}}
@@ -246,7 +246,7 @@ Finally, we plotted the NGA50 value as calculated by QUAST against the NA50, bef
 \end{figure}
 
 \subsection*{Performance}
-We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
+We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in Table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
 
 \begin{table}
 \begin{center}
