@@ -55,7 +55,7 @@ To calculate the degree of support for the assembly at each site across a contig
 \label{eq:posterior}  
 \end{eqnarray}
 
-where $Y_l$ is the insert size of read pair $l$, $\pi_x$ is the user defined prior probability of class $x$ and $\pi_1 + \pi_0 = 1$. The default value of $\pi_0$ is 0.01 (see table~\ref{tab:parameters}), meaning that in the absence of any insert size information, 99 \% of read pairs are expected to arise from the null distribution.  
+where $Y_l$ is the insert size of read pair $l$, $\pi_x$ is the user defined prior probability of class $x$ and $\pi_1 + \pi_0 = 1$. The default value of $\pi_0$ is 0.01 (see Table~\ref{tab:parameters}), meaning that in the absence of any insert size information, 99 \% of read pairs are expected to arise from the null distribution.  
 
 Within each window, the total support for a correct assembly at position $i$ can be calculated as:
 
@@ -89,61 +89,6 @@ z_l = \frac{D_l - \hat{\mu}_D}{s_D}
 \end{equation}
 
 A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (default value -4). This threshold describes the number of standard deviations below the mean assembly support that is required to identify an anomaly. The default value of -4 will flag only positions whose assembly support is less than four standard deviations below the mean level of support. As the parameters of the distribution are derived from the properties of the assembly, this is robust to variation in coverage, contig size and other assembly properties.
-
-\begin{table}[h]
-  \centering
-\resizebox{\textwidth}{!}{
-  \begin{tabular}{ll}
-    \hline
-    \textbf{Abbreviation:}             &    Bcer \\
-    \textbf{Bacteria:}                 &    \emph{Bacillus cereus ATCC 10987} \\
-    \textbf{Accession ID:}  &  NC\_003909, NC\_005707 \\ 
-    \textbf{NCBI FTP:}                 &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Bacillus\_cereus\_ATCC\_10987\_uid57673/} \\
-    \hline
-    \textbf{Abbreviation:}             &    EcDH \\ 
-    \textbf{Bacteria:}                 &    \emph{Escherichia coli str. K-12 substr. DH10B}\\ 
-    \textbf{Accession ID:}              &    NC\_010473 \\ 
-    \textbf{NCBI FTP:}     &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_DH10B\_uid58979/}\\
-    \hline
-    \textbf{Abbreviation:}             &   EcMG \\
-    \textbf{Bacteria:}                 & \emph{Escherichia coli str. K-12 substr. MG1655}\\
-    \textbf{Accession ID:}            & NC\_000913    \\ 
-    \textbf{NCBI FTP:}       & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_MG1655\_uid57779/}\\
-    \hline
-    \textbf{Abbreviation:}             &   list\\ 
-    \textbf{Bacteria:}                 &\emph{Listeria monocytogenes}\\  
-\textbf{Accession ID:}              & NC\_003210 \\ 
-\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Listeria\_monocytogenes\_EGD\_e\_uid61583/}\\
-\hline
-\textbf{Abbreviation:}             &  meio \\ 
-\textbf{Bacteria:}                 &\emph{Meiothermus ruber DSM 1279}\\ 
-\textbf{Accession ID:}             &NC\_013946 \\ 
-\textbf{NCBI FTP:}      & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Meiothermus\_ruber\_DSM\_1279\_uid46661/}\\
-   \hline
-\textbf{Abbreviation:}             &  ped \\
-\textbf{Bacteria:}                 &\emph{Pedobacter heparinus DSM 2366}\\
-\textbf{Accession ID:}                 & NC\_013061 \\ 
-\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Pedobacter\_heparinus\_DSM\_2366\_uid59111/}\\
-   \hline
-\textbf{Abbreviation:}             &   pneu \\
-\textbf{Bacteria:}                 & \emph{Klebsiella pneumoniae subsp. pneumoniae MGH 78578}  \\
-\textbf{Accession ID:}              & NC\_009648, NC\_009649, NC\_009650, NC\_009651, NC\_009652, NC\_009653 \\ 
-\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Klebsiella\_pneumoniae\_MGH\_78578\_uid57619/}\\
-   \hline
-\textbf{Abbreviation:}             &  rhod \\ 
-\textbf{Bacteria:}                 &\emph{Rhodobacter sphaeroides 2.4.1}\\ 
-\textbf{Accession ID:}                 &NC\_007488, NC\_007489, NC\_007490, NC\_007493, NC\_007494, NC\_009007, NC\_009008\\ 
-\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Rhodobacter\_sphaeroides\_2\_4\_1\_uid57653/}\\ 
-   \hline
-\textbf{Abbreviation:}             &  TB \\
-\textbf{Bacteria:}                 & \emph{Mycobacterium tuberculosis H37Ra}\\ 
-\textbf{Accession ID:}               &NC\_009525 \\ 
-\textbf{NCBI FTP:}    & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Mycobacterium\_tuberculosis\_H37Ra\_uid58853/}\\ 
-   \hline
-  \end{tabular}
-}
-  \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).\label{data-description}}
-\end{table}
 
 \subsection*{Global Assembly Parameters}
 NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the de novo assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation, pairs whose mapping quality falls below a user specified threshold, and pairs whose insert size exceed 30 Kb (approximately 10 times the mean insert size). The global mean $\hat{\mu}$ and median absolute deviation $\text{MAD}$ are calculated across all contigs in the assembly as:
@@ -214,7 +159,7 @@ TB & 70 & 184170 & 66 & 158885 \\\hline
 
 \subsection*{Performance Optimisation}
 \subsubsection*{ROC Plots}
-To optimimse the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
+To optimise the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
 
 As misassemblies are identified as point errors, but NxRepair identifies the region spanned by a misassembly, we needed a method to correctly compare the sites of true misassemblies with those identified by NxRepair. To make this comparison, we divided each contig of the assembly into short stretches of 1 Kb length. We then prepared an array, $A_{Nx}$ of size $\frac{L}{1000}$ for contig length $L$, corresponding to misassemblies identified by NxRepair. $A_{Nx}$ was filled as follows:
 
@@ -234,7 +179,7 @@ To prepare the ROCs each position $i$ in $A_{Nx}$ was labeled as true positive (
 \label{eq:tpr}
 \end{equation}
 
-Based on the resultant ROC plots, shown in Figure~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to optimise the true positive: false positive ratio. This threshld was used for all subsequent analyses. 
+Based on the resultant ROC plots, shown in Figure~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to optimise the true positive: false positive ratio. This threshold was used for all subsequent analyses. 
 
 \begin{figure}
 \centerline{\includegraphics[width=0.8\textwidth]{allROC_extensive.pdf}}
@@ -301,7 +246,7 @@ Finally, we plotted the NGA50 value as calculated by QUAST against the NA50, bef
 \end{figure}
 
 \subsection*{Performance}
-We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
+We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in Table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
 
 \begin{table}
 \begin{center}
@@ -321,6 +266,61 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
 \end{tabular}
 \end{center}
 \caption{NxRepair performance analysis. \label{tab:performance}}
+\end{table}
+
+\begin{table}[h]
+  \centering
+\resizebox{\textwidth}{!}{
+  \begin{tabular}{ll}
+    \hline
+    \textbf{Abbreviation:}             &    Bcer \\
+    \textbf{Bacteria:}                 &    \emph{Bacillus cereus ATCC 10987} \\
+    \textbf{Accession ID:}  &  NC\_003909, NC\_005707 \\ 
+    \textbf{NCBI FTP:}                 &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Bacillus\_cereus\_ATCC\_10987\_uid57673/} \\
+    \hline
+    \textbf{Abbreviation:}             &    EcDH \\ 
+    \textbf{Bacteria:}                 &    \emph{Escherichia coli str. K-12 substr. DH10B}\\ 
+    \textbf{Accession ID:}              &    NC\_010473 \\ 
+    \textbf{NCBI FTP:}     &    \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_DH10B\_uid58979/}\\
+    \hline
+    \textbf{Abbreviation:}             &   EcMG \\
+    \textbf{Bacteria:}                 & \emph{Escherichia coli str. K-12 substr. MG1655}\\
+    \textbf{Accession ID:}            & NC\_000913    \\ 
+    \textbf{NCBI FTP:}       & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia\_coli\_K\_12\_substr\_\_MG1655\_uid57779/}\\
+    \hline
+    \textbf{Abbreviation:}             &   list\\ 
+    \textbf{Bacteria:}                 &\emph{Listeria monocytogenes}\\  
+\textbf{Accession ID:}              & NC\_003210 \\ 
+\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Listeria\_monocytogenes\_EGD\_e\_uid61583/}\\
+\hline
+\textbf{Abbreviation:}             &  meio \\ 
+\textbf{Bacteria:}                 &\emph{Meiothermus ruber DSM 1279}\\ 
+\textbf{Accession ID:}             &NC\_013946 \\ 
+\textbf{NCBI FTP:}      & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Meiothermus\_ruber\_DSM\_1279\_uid46661/}\\
+   \hline
+\textbf{Abbreviation:}             &  ped \\
+\textbf{Bacteria:}                 &\emph{Pedobacter heparinus DSM 2366}\\
+\textbf{Accession ID:}                 & NC\_013061 \\ 
+\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Pedobacter\_heparinus\_DSM\_2366\_uid59111/}\\
+   \hline
+\textbf{Abbreviation:}             &   pneu \\
+\textbf{Bacteria:}                 & \emph{Klebsiella pneumoniae subsp. pneumoniae MGH 78578}  \\
+\textbf{Accession ID:}              & NC\_009648, NC\_009649, NC\_009650, NC\_009651, NC\_009652, NC\_009653 \\ 
+\textbf{NCBI FTP:}     & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Klebsiella\_pneumoniae\_MGH\_78578\_uid57619/}\\
+   \hline
+\textbf{Abbreviation:}             &  rhod \\ 
+\textbf{Bacteria:}                 &\emph{Rhodobacter sphaeroides 2.4.1}\\ 
+\textbf{Accession ID:}                 &NC\_007488, NC\_007489, NC\_007490, NC\_007493, NC\_007494, NC\_009007, NC\_009008\\ 
+\textbf{NCBI FTP:}  & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Rhodobacter\_sphaeroides\_2\_4\_1\_uid57653/}\\ 
+   \hline
+\textbf{Abbreviation:}             &  TB \\
+\textbf{Bacteria:}                 & \emph{Mycobacterium tuberculosis H37Ra}\\ 
+\textbf{Accession ID:}               &NC\_009525 \\ 
+\textbf{NCBI FTP:}    & \url{ftp.ncbi.nih.gov/genomes/Bacteria/Mycobacterium\_tuberculosis\_H37Ra\_uid58853/}\\ 
+   \hline
+  \end{tabular}
+}
+  \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).\label{data-description}}
 \end{table}
 
 \section*{Conclusions}
