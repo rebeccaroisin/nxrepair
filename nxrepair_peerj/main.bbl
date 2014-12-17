@@ -5,7 +5,7 @@ Bankevich, A., Nurk, S., Antipov, D., Gurevich, A.~A., Dvorkin, M., Kulikov,
   A.~S., Lesin, V.~M., Nikolenko, S.~I., Pham, S., Prjibelski, A.~D., Pyshkin,
   A.~V., Sirotkin, A.~V., Vyahhi, N., Tesler, G., Alekseyev, M.~A., and
   Pevzner, P.~A. (2012).
-\newblock Spades: A new genome assembly algorithm and its applications to
+\newblock {SPAdes}: A new genome assembly algorithm and its applications to
   single-cell sequencing.
 \newblock {\em J. Comp. Biol.}, 19(5):455--477.
 
@@ -32,18 +32,18 @@ Bradnam, K., Fass, J.~N., Alexandrov, A., Baranay, P., Bechner, M., Birol, I.,
 
 \bibitem[Clark et~al., 2013]{Clark2013}
 Clark, S.~C., Egan, R., Frazier, P.~I., and Wang, Z. (2013).
-\newblock Ale: a generic assembly likelihood evaluation framework for asessing
-  the accuracy of genome and metagenome assemblies.
+\newblock {ALE}: a generic assembly likelihood evaluation framework for
+  asessing the accuracy of genome and metagenome assemblies.
 \newblock {\em Bioinformatics}, 29(4):435--443.
 
 \bibitem[Coil et~al., 2014]{Coil2014}
 Coil, D., Jospin, G., and Darling, A.~E. (2014).
-\newblock A5-miseq: an updated pipeline to assemble microbial genomes from
-  illumina miseq data.
+\newblock {A5-miseq}: an updated pipeline to assemble microbial genomes from
+  illumina {MiSeq} data.
 
 \bibitem[Compeau et~al., 2011]{compeau2011}
 Compeau, P. E.~C., Pevzner, P.~A., and Tesler, G. (2011).
-\newblock How to apply de bruijn graphs to genome assembly.
+\newblock How to apply de {Bruijn} graphs to genome assembly.
 \newblock {\em Nature Biotechnol.}, 29:987--991.
 
 \bibitem[Cormen et~al., 2009]{cormen2009}
@@ -53,34 +53,34 @@ Cormen, T.~H., Leiserson, C.~E., Rivest, R.~L., and Stein, C. (2009).
 
 \bibitem[Ghodsi et~al., 2013]{Ghodsi2013}
 Ghodsi, M., Hill, C.~M., Astrovskaya, I., Lin, H., and Sommer, D.~D. (2013).
-\newblock Se novo likelihood-based measures for comparing genome assemblies.
+\newblock De novo likelihood-based measures for comparing genome assemblies.
 \newblock {\em BMC Research Notes}, 6:334.
 
 \bibitem[Gurevich et~al., 2013]{gurevich2013}
 Gurevich, A., Saveliev, V., Vyahhi, N., and Tesler, G. (2013).
-\newblock Quast: quality assessment tool for genome assemblies.
+\newblock {QUAST}: quality assessment tool for genome assemblies.
 \newblock {\em Bioinformatics}, 29(8):1072--1075.
 
 \bibitem[Hunt et~al., 2013]{Hunt2013}
 Hunt, M., Kikuchi, T., Sanders, M., Newbold, C., Berriman, M., and Otto, T.~D.
   (2013).
-\newblock Reapr: a universal tool for genome assembly evaluation.
+\newblock {REAPR}: a universal tool for genome assembly evaluation.
 \newblock {\em Genome Biol.}, 14:R47.
 
 \bibitem[Hunter, 2007]{Hunter2007}
 Hunter, J.~D. (2007).
-\newblock Matplotlib: A 2d graphics environment.
+\newblock Matplotlib: A {2D} graphics environment.
 \newblock {\em Computing In Science and Engineering}, 9(3):90--95.
 
 \bibitem[Li, 2013]{li2013}
 Li, H. (2013).
 \newblock Aligning sequence reads, clone sequences and assembly contigs with
-  bwa-mem.
+  {BWA-MEM}.
 
 \bibitem[Li et~al., 2009]{li2009}
 Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth,
   G., Abecasis, G., Durbin, R., and Subgroup, . G. P. D.~P. (2009).
-\newblock The sequence alignment/map format and samtools.
+\newblock The sequence alignment/map format and {SAMtools}.
 \newblock {\em Bioinformatics}, 25(16):2078--2079.
 
 \bibitem[Millman and Aivazis, 2011]{scipy}
@@ -92,13 +92,13 @@ Millman, K.~J. and Aivazis, M. (2011).
 Salzberg, S.~L., Phillippy, A.~M., Zimin, A., Puiu, D., Magoc, T., Koren, S.,
   Treangen, T.~J., Schatz, M.~C., Delcher, A.~L., Roberts, M., Marçais, G.,
   Pop, M., and Yorke, J.~A. (2012).
-\newblock Gage: A critical evaluation of genome assemblies and assembly
+\newblock {GAGE}: A critical evaluation of genome assemblies and assembly
   algorithms.
 \newblock {\em Genome Res.}, 22(3):557--567.
 
 \bibitem[van~der Walt et~al., 2011]{numpy}
 van~der Walt, S., Colbert, S.~C., and Varoquaux, G. (2011).
-\newblock The numpy array: A structure for efficient numerical computation.
+\newblock The {NumPy} array: A structure for efficient numerical computation.
 \newblock {\em Computing in Science and Engineering}, 13:22--30.
 
 \bibitem[Walker, 2014]{pilon2014}
@@ -108,7 +108,7 @@ Walker, B. (2014).
 
 \bibitem[Zerbino and Birney, 2008]{zerbino2008}
 Zerbino, D.~R. and Birney, E. (2008).
-\newblock Velvet: algorithms for de novo short read assembly using de bruijn
+\newblock Velvet: algorithms for de novo short read assembly using de {Bruijn}
   graphs.
 \newblock {\em Genome Res.}, 18(5):821--829.
 
