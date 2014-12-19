@@ -13,10 +13,10 @@
 
 \author[1]{Rebecca R. Murphy}
 \author[2]{Jared O'Connell}
-\author[1]{Anthony J. Cox}
-\author[1]{Ole Schulz-Trieglaff}
-\affil[1]{Illumina Cambridge, Chesterford Research Park, Essex, CB10 1XL}
-\affil[2]{Department of Chemistry, University of Cambridge, UK}
+\author[2]{Anthony J. Cox}
+\author[2]{Ole Schulz-Trieglaff}
+\affil[1]{Department of Chemistry, University of Cambridge, UK}
+\affil[2]{Illumina Cambridge, Chesterford Research Park, Essex, CB10 1XL}
 
 \keywords{de novo assembly, bioinformatics, error correction, bacteria}
 
@@ -220,7 +220,7 @@ The default parameters used and their meanings are shown in Table~\ref{tab:param
     maxinsert & 30000 &  Maximum insert size, below which a read pair is included in calculating population statistics.\\
     minmapq & 40 & Minimum MapQ value, above which a read pair is included in calculating population statistics.\\
     minsize & 10000 & Minimum contig size to analyse.\\ 
-    prior & 0.01 & Prior probablility that the insert size is anomalous.\\
+    prior & 0.01 & Prior probability that the insert size is anomalous.\\
     stepsize & 1000 & Step-size in bases to traverse contigs.\\
     trim & 4000 & Number of bases to trim from each side of an identified misassembly.\\
     T & -4.0 & Threshold in Z score (number of standard deviations from the mean) below which a misassembly is called.\\
@@ -234,7 +234,7 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 
 
 \section*{Results and Discussion}
-We used NxRepair to correct de novo assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for five genomes, two of which contained no large errors, no errors were found and the assembly was unchanged. We note that in the case of the TB genome, the NGA50 was slightly reduced by NxRepair correction. Manual inspection of the correction sites revealed that one of the misassemblies reported by nxrepair was a join between two contigs which consisted of a gap of over 2 kb bridged by very few mate pairs. This join is reported as correct by Quast, but has only little support from the read data. We fail to correct some misassemblies because they do not exhibit a signal given the wide insert size distribution of the Nextera mate pairs.
+We used NxRepair to correct de novo assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for five genomes, two of which contained no large errors, no errors were found and the assembly was unchanged. We note that in the case of the TB genome, the NGA50 was slightly reduced by NxRepair correction. Manual inspection of the correction sites revealed that one of the misassemblies reported by NxRepair was a join between two contigs which consisted of a gap of over 2 kb bridged by very few mate pairs. This join is reported as correct by QUAST, but has only little support from the read data. We fail to correct some misassemblies because they do not exhibit a signal given the wide insert size distribution of the Nextera mate pairs.
 
 \subsection*{Performance}
 We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in Table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
@@ -318,6 +318,10 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
 NxRepair is a simple error correction module that can be used to identify and remove large scale errors from de novo assemblies using Nextera mate pair reads. We evaluated NxRepair using nine bacterial genomes, showing that of the seven genomes containing misassemblies, six could be improved by NxRepair correction. NxRepair is freely available online and can be run with a single call from the command line, making it an attractive option for improving assembly quality.
 
 \section*{Acknowledgments}
+We thank Emma Carlson and Niall Gormley (Illumina Cambridge) for preparing the Nextera mate pair libraries.
+
+RRM is a BBSRC PhD student. This work was completed during a paid internship at Illumina. JO, AJC and OS-T are permanent employees of Illumina Inc., a public company that develops and markets systems for genomic analysis. 
+They receive shares as part of their compensation.
 
 
 \bibliography{detecting_large_missassemblies}
