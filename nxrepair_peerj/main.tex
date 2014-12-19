@@ -39,14 +39,14 @@ Here we introduce NxRepair, an assembly error detection tool that can identify t
 
 \begin{figure*}
 \centerline{\includegraphics[width=0.8\textwidth]{fig1_nxrepair.pdf}}
-\caption{Using NxRepair to remove large misassemblies. (A) A de novo assembly of the Mycobacterium tuberculosis genome contains several large misassemblies. (B) Low support for the assembly is identified in three regions of a contig using NxRepair. (C) Breaking the contigs at the identified positions resolves the most significant misassemblies. In (A) and (C), horizontal lines demarcate contig boundaries.}\label{fig:NxRepair}
+\caption{Using NxRepair to remove large misassemblies. (A) Alignment of the de novo assembly of the TB genome to its reference genome. The assembly contains several large misassemblies. (B) A plot of NxRepair's support metric against scaffold position for the TB assembly. Low support for the assembly is identified in three regions of a contig. (C) Breaking the contigs at the identified positions resolves the most significant misassemblies. In (A) and (C), horizontal lines demarcate the scaffold boundaries.}\label{fig:NxRepair}
 \end{figure*}
 
 \section*{Implementation}
 \subsection*{Statistical Analysis of Mate Pair Insert Sizes}
 Nextera mate pair libraries are prepared to have a certain insert size, typically between 1 and 10 kb. When the mate pairs used to prepare an assembly are aligned back to the assembly, large misassemblies result in unusual insert sizes and read orientations. We model this using a two-component mixture distribution. The first component of this mixture is the insert size distribution of correctly aligned mate pairs.  We model the distribution of insert sizes, $Y$, as a normal distribution with mean $\hat{\mu}$ and standard deviation $\hat{\sigma}$: $Y \sim N(\hat{\mu},\hat{\sigma}^2).$ We estimate $\hat{\mu}$ and $\hat{\sigma}$ for the entire genome by aligning reads back to the assembly and using robust estimators (see below). The second component, defined as a uniform distribution across the contig size $U(0,L)$ for a contig of length $L$, captures anomalous insert sizes.
 
-To calculate the degree of support for the assembly at each site across a contig, NxRepair retrieves all mate pairs spanning a window of size `window' (default vale 200 bases, see FIg~\ref{tab:parameters}) at position $i$ on the contig. We define a latent indicator variable $X_l\in\{0,1\}$ for each pair of reads, $l$, which takes the value $1$ if the insert size came from the null distribution, and $0$ otherwise. Within each window queried, the probability that each retrieved read, $r_l$ is drawn from the null distribution is given by:
+To calculate the degree of support for the assembly at each site across a contig, NxRepair retrieves all mate pairs spanning the region $[i-W, i+W]$, of size $2W$ at position $i$ on the contig. The default value of $W$ is200 bases (see Table~\ref{tab:parameters}). We define a latent indicator variable $X_l\in\{0,1\}$ for each pair of reads, $l$, which takes the value $1$ if the insert size came from the null distribution, and $0$ otherwise. Within each window queried, the probability that each retrieved read, $r_l$ is drawn from the null distribution is given by:
 
 \begin{eqnarray} P(X_l=x|Y_l)& =& \frac{P(X_l=x)(Y_l|X_l=x)}{\sum_{k=0}^1P(X_l=k)(Y_l|X_l=k)}\\
   & =& \frac{\pi_x(Y_l|X_l=x)}{\sum_{k=0}^1 \pi_k(Y_l|X_l=k)}
@@ -86,7 +86,7 @@ z_l = \frac{D_l - \hat{\mu}_D}{s_D}
 \label{eq:zscore}
 \end{equation}
 
-A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (default value -4). This threshold describes the number of standard deviations below the mean assembly support that is required to identify an anomaly. The default value of -4 will flag only positions whose assembly support is less than four standard deviations below the mean level of support. As the values of the distribution's parameters are derived from the properties of the assembly, this is robust to variation in coverage, contig size and other assembly properties.
+A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (default value -4). This threshold describes the number of standard deviations below the mean assembly support that is required to identify an anomaly. The default value of -4 will flag only positions whose assembly support is less than four standard deviations below the mean level of support.
 
 \subsection*{Global Assembly Parameters}
 NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the de novo assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation, pairs whose mapping quality falls below a user specified threshold, and pairs whose insert size exceed 30 kb (approximately 10 times the mean insert size). The global mean $\hat{\mu}$ and median absolute deviation $\text{MAD}$ are calculated across all contigs in the assembly as:
@@ -159,7 +159,7 @@ TB & 70 & 184170 & 66 & 158885 \\\hline
 \subsubsection*{ROC Plots}
 To optimise the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
 
-To correctly compare the sites of true misassemblies with those identified by NxRepair, we divided each contig of the assembly into short stretches of 1 kb length. We then prepared an array, $A_{Nx}$ of size $\frac{L}{1000}$ for contig length $L$, corresponding to misassemblies identified by NxRepair. $A_{Nx}$ was filled as follows:
+The positions of true misassemblies were identified by aligning each de novo assembly to its reference genome using QUAST~\citep{gurevich2013}. To correctly compare the sites of true misassemblies with those identified by NxRepair, we divided each contig of the assembly into short stretches of 1 kb length. We then prepared an array, $A_{Nx}$ of size $\frac{L}{1000}$ for contig length $L$, corresponding to misassemblies identified by NxRepair. $A_{Nx}$ was filled as follows:
 
 \begin{equation}
     A_{Nx}=
@@ -177,7 +177,7 @@ To prepare the ROCs each position $i$ in $A_{Nx}$ was labeled as true positive (
 \label{eq:tpr}
 \end{equation}
 
-Based on the resultant ROC plots, shown in Fig.~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to be optimal and was used for all subsequent analyses. 
+Based on the resultant ROC plots, shown in Fig.~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to detect true misassemblies with minimal false positives, so was used for all subsequent analyses. 
 
 \begin{figure}
 \centerline{\includegraphics[width=0.8\textwidth]{allROC_extensive.pdf}}
@@ -190,7 +190,7 @@ Performance analysis was performed on a single core with 8 GB RAM available. Run
 \subsection*{Workflow Pipeline}
 De novo assemblies were prepared using the SPAdes Assembler, version 3.1.1~\citep{Bankevich2012}:
 
-\texttt{spades.py -k 21,33,55,77 -t 4 --careful \\ --hqmp1-12 bacteria.fastq.gz  --hqmp1-fr -o assembly}
+\texttt{spades.py -k 21,33,55,77 -t 4 \\ --hqmp1-12 bacteria.fastq.gz  --hqmp1-fr -o assembly}
 
 The initial assembly quality was evaluated using QUAST~\citep{gurevich2013} to align the de novo assembly to a reference genome:
 
@@ -209,7 +209,7 @@ We identified misassemblies using NxRepair as follows:
 \texttt{python nxrepair.py sample.bam   sample/scaffolds.fasta sample\_scores.csv  sample\_new.fasta -img\_name sample\_new}
 
 
-The default parameters used and their meanings are shown in Table~\ref{tab:parameters}. These have been optimised for Illumina Nextera mate pair libraries with a mean insert size of approximately 3 kb. For mate pair libraries with a much larger (smaller) insert size, the maxinsert and trim parameters may need to be increased (decreased).
+The default parameters used and their meanings are shown in Table~\ref{tab:parameters}. These have been optimised for Illumina Nextera mate pair libraries with a mean insert size of approximately 4 kb. For mate pair libraries with a much larger (smaller) insert size, the maxinsert and trim parameters may need to be increased (decreased).
 
 \begin{table}
 \begin{center}
