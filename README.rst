@@ -2,7 +2,7 @@
 NxRepair
 ========
 
-Welcome to NxRepair!
+Welcome to NxRepair,! NxRepair is an automated error detection tool for use with de novo assemblies from Nextera mate pair data.
 
 We have a tutorial_ and API on ReadTheDocs_
 

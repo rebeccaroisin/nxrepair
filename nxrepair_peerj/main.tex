@@ -10,7 +10,6 @@
 \usepackage{parskip}
 
 \title{NxRepair: Error Correction in De Novo Sequence Assembly Using Nextera Mate Pairs}
-
 \author[1]{Rebecca R. Murphy}
 \author[2]{Jared O'Connell}
 \author[2]{Anthony J. Cox}
@@ -18,7 +17,8 @@
 \affil[1]{Department of Chemistry, University of Cambridge, UK}
 \affil[2]{Illumina Cambridge, Chesterford Research Park, Essex, CB10 1XL}
 
-\keywords{de novo assembly, bioinformatics, error correction, bacteria}
+\keywords{de novo assembly, mate pair, genome assembly, error correction, scaffolding, insert size, misassembly, misassembly correction, assembly quality, automated error detection}
+%\keywords{}
 
 \begin{abstract}
 Scaffolding errors and incorrect traversals of the de Bruijn graph during de novo assembly can result in large scale misassemblies in draft genomes. Nextera mate pair sequencing data provide additional information to resolve assembly ambiguities during scaffolding. Here, we introduce NxRepair, an open source toolkit for error correction in de novo assemblies that uses Nextera mate pair libraries to identify and correct large-scale errors. We show that NxRepair can identify and correct large scaffolding errors, without use of a reference sequence, resulting in quantitative improvements in the assembly quality. NxRepair can be downloaded from GitHub; a tutorial and user documentation are also available.
@@ -180,7 +180,7 @@ To prepare the ROCs each position $i$ in $A_{Nx}$ was labeled as true positive (
 Based on the resultant ROC plots, shown in Fig.~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to detect true misassemblies with minimal false positives, so was used for all subsequent analyses. 
 
 \begin{figure}
-\centerline{\includegraphics[width=0.8\textwidth]{allROC_extensive.pdf}}
+\centerline{\includegraphics[width=0.8\textwidth]{fig2_allROC_extensive.pdf}}
 \caption{ROC plots for the seven genomes containing misassemblies.\label{fig:ROCs}}
 \end{figure}
 
@@ -320,8 +320,8 @@ NxRepair is a simple error correction module that can be used to identify and re
 \section*{Acknowledgments}
 We thank Emma Carlson and Niall Gormley (Illumina Cambridge) for preparing the Nextera mate pair libraries.
 
-RRM is a BBSRC PhD student. This work was completed during a paid internship at Illumina. JO, AJC and OS-T are permanent employees of Illumina Inc., a public company that develops and markets systems for genomic analysis. 
-They receive shares as part of their compensation.
+%RRM is a BBSRC PhD student. This work was completed during a paid internship at Illumina. JO, AJC and OS-T are permanent employees of Illumina Inc., a public company that develops and markets systems for genomic analysis. 
+%They receive shares as part of their compensation.
 
 
 \bibliography{detecting_large_missassemblies}
