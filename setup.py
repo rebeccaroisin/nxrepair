@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'nxrepair',
   packages = ['nxrepair'], # this must be the same as the name above
-  version = '0.11',
+  version = '0.12',
   description = 'Automated error detection using Nextera Mate Pair data',
   author = 'Rebecca R. Murphy',
   author_email = 'rrm33@cam.ac.uk',
