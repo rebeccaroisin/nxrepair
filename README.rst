@@ -16,4 +16,4 @@ To get started, here's how to use NxRepair (more details, caveats and options in
 
 .. code-block:: bash
 
-    python nxrepair.py aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta	
+    nxrepair aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta	
