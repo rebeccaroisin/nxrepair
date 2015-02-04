@@ -7,11 +7,11 @@ NxRepair is a python module that automatically detects large structural errors i
 Installing NxRepair
 ^^^^^^^^^^^^^^^^^^^^
 
-NxRepair program can be cloned from github:
+NxRepair can be installed from the python package index using pip install:
 
 .. code-block:: bash
 
-    git clone https://github.com/rebeccaroisin/nxrepair
+    pip install nxrepair
 
 NxRepair uses several other python libraries, which you will need to install. Specifically, you will need:
 
@@ -36,17 +36,23 @@ Pysam can also be installed using "pip install", but errors are more common.
 
 Assistance with installation errors for pysam_ can be found online. Note that the current version of pysam wraps samtools-0.1.19 and tabix-0.2.6.
 
-.. _pysam: https://groups.google.com/forum/#!forum/pysam-user-group
+.. _pysam: https://groups.google.com/forum/#!forum/pysam-user-group    
+
+If you want to modify the scritps, you can clone NxRepair from github:
+
+.. code-block:: bash
+
+    git clone https://github.com/rebeccaroisin/nxrepair
 
 
 Running NxRepair
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 NxRepair can be run from the command line. 
 
 .. code-block:: bash
 
-    python nxrepair.py aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta
+    nxrepair aligned_matepairs.bam assembly_fasta.fasta error_locations.csv new_fasta.fasta
 
 The required arguments are as follows:
 
@@ -84,7 +90,7 @@ Optional arguments are called from the commmand line, as shown in the example be
 
 .. code-block:: bash
 
-    python nxrepair.py aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta -minsize 20000 -trim 4000 -T -5.0
+    nxrepair aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta -minsize 20000 -trim 4000 -T -5.0
 
 The program will parse a bam file of reads aligned to your de novo assembly. Each contig that is larger than the min_size parameter will be analysed for potential structural misassemblies. When the program completes, a minimum of two new files will be generated:
 
@@ -98,4 +104,6 @@ Outputs 2 and 3 can allow identification of further, smaller structural misassem
 How Does it Work?
 ^^^^^^^^^^^^^^^^^
 
-NxRepair evaluates the insert sizes of mate pairs aligned across a contig. Regions of the contig that have unusual insert sizes, where few reads are aligned, or where a large fraction of the mate pairs have incorrect orientation are flagged as potentially anomalous based on a simple probabilistic model of the mate-pair size distribution. Where there is strong evidence that a region is misassembled, the contig will be broken into two pieces and 5 Kb of erroneous assemby will be trimmed from both sides of the break.
+NxRepair evaluates the insert sizes of mate pairs aligned across a contig. Regions of the contig that have unusual insert sizes, where few reads are aligned, or where a large fraction of the mate pairs have incorrect orientation are flagged as potentially anomalous based on a simple probabilistic model of the mate-pair size distribution. Where there is strong evidence that a region is misassembled, the contig will be broken into two pieces and 5 Kb of erroneous assemby will be trimmed from both sides of the break. For details, please see the preprint of our paper_.
+
+.. _paper: https://peerj.com/preprints/747/

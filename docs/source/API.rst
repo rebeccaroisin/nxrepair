@@ -8,6 +8,3 @@ Contents:
 
 .. automodule:: nxrepair
 
-.. autoclass:: aligned_assembly
-	:members:
-

@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="misassembly_detection 1.0 documentation" href="index.html" />
-    <link rel="prev" title="Missassembly Detection With Python: API" href="API.html" /> 
+    <link rel="prev" title="NxRepair: API" href="API.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="API.html" title="Missassembly Detection With Python: API"
+          <a href="API.html" title="NxRepair: API"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">misassembly_detection 1.0 documentation</a> &raquo;</li> 
       </ul>
@@ -53,8 +53,8 @@
 <p>NxRepair is a python module that automatically detects large structural errors in de novo assemblies using Nextera mate pair reads. The decector will break a contig at the site of an identified misassembly and will generate a new fasta file containing both the corrected contigs and the correct, unaffected contigs.</p>
 <div class="section" id="installing-nxrepair">
 <h2>Installing NxRepair<a class="headerlink" href="#installing-nxrepair" title="Permalink to this headline">¶</a></h2>
-<p>NxRepair program can be cloned from github:</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/rebeccaroisin/nxrepair
+<p>NxRepair can be installed from the python package index using pip install:</p>
+<div class="highlight-bash"><div class="highlight"><pre>pip install nxrepair
 </pre></div>
 </div>
 <p>NxRepair uses several other python libraries, which you will need to install. Specifically, you will need:</p>
@@ -73,11 +73,15 @@ pip install matplotlib
 <p>If you don&#8217;t currently have any of these libraries, we recommend installing <a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>, a python distribution that includes all of these libraries, along with all major scientific and analytical python packages.</p>
 <p>Pysam can also be installed using &#8220;pip install&#8221;, but errors are more common.</p>
 <p>Assistance with installation errors for <a class="reference external" href="https://groups.google.com/forum/#!forum/pysam-user-group">pysam</a> can be found online. Note that the current version of pysam wraps samtools-0.1.19 and tabix-0.2.6.</p>
+<p>If you want to modify the scritps, you can clone NxRepair from github:</p>
+<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/rebeccaroisin/nxrepair
+</pre></div>
+</div>
 </div>
 <div class="section" id="running-nxrepair">
 <h2>Running NxRepair<a class="headerlink" href="#running-nxrepair" title="Permalink to this headline">¶</a></h2>
 <p>NxRepair can be run from the command line.</p>
-<div class="highlight-bash"><div class="highlight"><pre>python nxrepair.py aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta
+<div class="highlight-bash"><div class="highlight"><pre>nxrepair aligned_matepairs.bam assembly_fasta.fasta error_locations.csv new_fasta.fasta
 </pre></div>
 </div>
 <p>The required arguments are as follows:</p>
@@ -140,7 +144,7 @@ pip install matplotlib
 </tbody>
 </table>
 <p>Optional arguments are called from the commmand line, as shown in the example below:</p>
-<div class="highlight-bash"><div class="highlight"><pre>python nxrepair.py aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta -minsize 20000 -trim 4000 -T -5.0
+<div class="highlight-bash"><div class="highlight"><pre>nxrepair aligned_matepairs.bam assemblyfasta.fasta error_locations.csv new_fasta.fasta -minsize 20000 -trim 4000 -T -5.0
 </pre></div>
 </div>
 <p>The program will parse a bam file of reads aligned to your de novo assembly. Each contig that is larger than the min_size parameter will be analysed for potential structural misassemblies. When the program completes, a minimum of two new files will be generated:</p>
@@ -153,7 +157,7 @@ pip install matplotlib
 </div>
 <div class="section" id="how-does-it-work">
 <h2>How Does it Work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this headline">¶</a></h2>
-<p>NxRepair evaluates the insert sizes of mate pairs aligned across a contig. Regions of the contig that have unusual insert sizes, where few reads are aligned, or where a large fraction of the mate pairs have incorrect orientation are flagged as potentially anomalous based on a simple probabilistic model of the mate-pair size distribution. Where there is strong evidence that a region is misassembled, the contig will be broken into two pieces and 5 Kb of erroneous assemby will be trimmed from both sides of the break.</p>
+<p>NxRepair evaluates the insert sizes of mate pairs aligned across a contig. Regions of the contig that have unusual insert sizes, where few reads are aligned, or where a large fraction of the mate pairs have incorrect orientation are flagged as potentially anomalous based on a simple probabilistic model of the mate-pair size distribution. Where there is strong evidence that a region is misassembled, the contig will be broken into two pieces and 5 Kb of erroneous assemby will be trimmed from both sides of the break. For details, please see the preprint of our <a class="reference external" href="https://peerj.com/preprints/747/">paper</a>.</p>
 </div>
 </div>
 
@@ -175,7 +179,7 @@ pip install matplotlib
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="API.html"
-                        title="previous chapter">Missassembly Detection With Python: API</a></p>
+                        title="previous chapter">NxRepair: API</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.txt"
@@ -208,14 +212,14 @@ pip install matplotlib
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="API.html" title="Missassembly Detection With Python: API"
+          <a href="API.html" title="NxRepair: API"
              >previous</a> |</li>
         <li><a href="index.html">misassembly_detection 1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Rebecca R. Murphy.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
