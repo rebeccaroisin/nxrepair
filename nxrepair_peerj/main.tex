@@ -31,7 +31,7 @@ Scaffolding errors and incorrect traversals of the de Bruijn graph during \texti
 \thispagestyle{empty}
 
 \section*{Introduction}
-De Bruijn graph construction and traversal is a popular method for \textit{de novo} genome assembly~\citep{compeau2011}. However, traversal of repeat regions, which tangle the de Bruijn graph, remains challenging. Read pairs with a large insert size, such as the Illumina Nextera mate pairs can provide additional information for repeat disambiguation. Many assemblers incorporate mate pair insert size information into the assembly and scaffolding process~\citep{Bankevich2012, zerbino2008}, but large scale scaffolding errors can still occur (Fig.~\ref{fig:NxRepair} (A)). 
+De Bruijn graph construction and traversal is a popular method for \textit{de novo} genome assembly~\citep{compeau2011}. However, traversal of repeat regions, which tangle the de Bruijn graph, remains challenging. Read pairs with a large insert size, such as the Illumina Nextera mate pairs~\citep{nextera2012} can provide additional information for repeat disambiguation. Many assemblers incorporate mate pair insert size information into the assembly and scaffolding process~\citep{Bankevich2012, zerbino2008}, but large scale scaffolding errors can still occur (Fig.~\ref{fig:NxRepair} (A)). 
 
 Error correction in \textit{de novo} assemblies is a well-studied problem. Recent work, such as the Assemblathon~\citep{Bradnam2013} and GAGE~\citep{Salzberg2012} collaborations, compare the quality of assemblies prepared by various assemblers. A Bayesian method of assembly quality evaluation also exists~\citep{Ghodsi2013}. Several recent papers have developed error identification and correction methods. The A5 Assembly Pipeline~\citep{Coil2014, tritt2012} includes an error detection and rescaffolding step and two new tools, REAPR~\citep{Hunt2013} and ALE~\citep{Clark2013} use read pair data to identify misassemblies. A similar tool is currently under development at the Broad Institute~\citep{pilon2014}. However with the exception of ALE, which is no longer actively maintained, these tools are not optimised to use mate pair information.  
 
@@ -44,7 +44,9 @@ Here we introduce NxRepair, an assembly error detection tool that can identify t
 
 \section*{Implementation}
 \subsection*{Statistical Analysis of Mate Pair Insert Sizes}
-Nextera mate pair libraries are prepared to have a certain insert size, typically between 1 and 10 kb. When the mate pairs used to prepare an assembly are aligned back to the assembly, large misassemblies result in unusual insert sizes and read orientations. We model this using a two-component mixture distribution. The first component of this mixture is the insert size distribution of correctly aligned mate pairs.  We model the distribution of insert sizes, $Y$, as a normal distribution with mean $\hat{\mu}$ and standard deviation $\hat{\sigma}$: $Y \sim N(\hat{\mu},\hat{\sigma}^2).$ We estimate $\hat{\mu}$ and $\hat{\sigma}$ for the entire genome by aligning reads back to the assembly and using robust estimators (see below). The second component, defined as a uniform distribution across the contig size $U(0,L)$ for a contig of length $L$, captures anomalous insert sizes.
+Nextera mate pair libraries are prepared to have a certain insert size, typically between 1 and 10 kb. When the mate pairs used to prepare an assembly are aligned back to the assembly, large misassemblies result in unusual insert sizes and read orientations. We model this using a two-component mixture distribution. The first component of this mixture is the insert size distribution of correctly aligned mate pairs.  We model the distribution of insert sizes, $Y$, as a normal distribution with mean $\hat{\mu}$ and standard deviation $\hat{\sigma}$: $Y \sim N(\hat{\mu},\hat{\sigma}^2).$ We estimate $\hat{\mu}$ and $\hat{\sigma}$ for the entire genome by aligning reads back to the assembly and using robust estimators (see below). The second component, defined as a uniform distribution across the contig size $U(0,L)$ for a contig of length $L$, captures anomalous insert sizes. 
+
+A uniform distribution was selected to model insert sizes, as it makes no assumption about the 
 
 To calculate the degree of support for the assembly at each site across a contig, NxRepair retrieves all mate pairs spanning the region $[i-W, i+W]$, of size $2W-1$ at position $i$ on the contig. The default value of $W$ is 200 bases (see Table~\ref{tab:parameters}). We define a latent indicator variable $X_l\in\{0,1\}$ for each pair of reads, $l$, which takes the value $1$ if the insert size came from the null distribution, and $0$ otherwise. Within each window queried, the probability that each retrieved read, $r_l$ is drawn from the null distribution is given by:
 
@@ -105,13 +107,15 @@ where $Y_l$ is the insert size of the $l$th of $N$ reads with correct pairing be
 
 for $K = 1.4826$
 
+The $\text{MAD}$ is a robust estimator for the standard deviation, as it is not sensitive to outliers, such as the long tail of the mate pair insert size distribution. Using the MAD as an estimator prevents over-estimating the variance of the insert size, allowing anomalously large insert sizes to be correctly identified.
+
 These were then used as the parameters of the null distribution, as described in the main paper.
 
 \subsection*{Interval Tree Construction}
-To facilitate rapid lookup of mate pair properties, we construct an interval tree~\citep{cormen2009} for each contig in the \textit{de novo} assembly. An interval tree is a data structure that facilitates $O(\text{log} n + m)$ lookup of intervals that span a given point or interval, for $n$ total entries and $m$ spanning entries. The interval tree contains the start and end positions of each mate pair aligned to that contig, as well as an flag variable indicating whether that mate pair had correct strand and pairing orientation. Mate pairs where the two reads align to different contigs were excluded. This allows NxRepair to rapidly query positions across a contig to discover the insert size distribution at the queried position.  
+To facilitate rapid lookup of mate pair properties, we construct an interval tree~\citep{cormen2009} for each contig in the \textit{de novo} assembly. An interval tree is a data structure that facilitates $O(\text{log} n + m)$ lookup of intervals that span a given point or interval, for $n$ total entries and $m$ spanning entries. The interval tree contains the start and end positions of each mate pair aligned to that contig, as well as a flag variable indicating whether that mate pair had correct strand and pairing orientation. Mate pairs where the two reads align to different contigs were excluded. For each position $i$ for which the Z-score is to be calculated, the tree is queried with a start position $i-W$ and end position $i+W$, to retrieve read pairs spanning the interval between positions $i-W$ and $i+W$ (exclusive). The insert sizes of retrieved read pairs are then used to calculate the Z-score for position $i$. This allows NxRepair to rapidly query positions across a contig to discover the insert size distribution at the queried position. Use of the interval tree significantly increases the efficiency of Z-score calculation, as each pair of reads is fetched only once from the bam file in order to build the tree. All relevant parameters are then stored in the tree for rapid look-up when a position is queried. This has several advantages. Firstly, it is significantly faster than fetching reads only when a position is queried. Secondly, it is more space efficient than a frequency array of all positions on all contigs but does not lose any information about the exact alignment positions. Finally, once construction of the tree is complete, multiple passes across a contig (for example with different spatial resolution, or using different window sizes) can rapidly be made using the same tree.      
 
 \subsection*{Misassembly Location and Contig Breaking}
-To improve the quality of the \textit{de novo} assembly, a contig is broken into two separate pieces at the site of a misassembly and the broken ends of the two new contigs trimmed by a user defined length (default 4 kb) to remove the misassembled region. To prevent excessive clipping, misassemblies separated by less than the trimming distance are grouped together, the contig is broken at the start and end of the misassembled region and the misassembled section is discarded. Low-scoring regions within the trimming distance of the ends of contigs are not considered misassemblies, as the high proportion of mate pairs aligning here whose mate maps to a different contig reduces the number of pairs under consideration and hence lowers the observed Z-score. This also ensures that circular molecules, such as small plasmids, which are assembled into a single contig, are not truncated because of mate pairs at either end of the assembly that appear to span the entire contig, but which are spatially close when circularisation is considered.
+To improve the quality of the \textit{de novo} assembly, a contig is broken into two separate pieces at the site of a misassembly. The broken ends of the two new contigs can optionally be trimmed by a user defined length (default 4 kb) to remove the misassembled region. Trimming allows removal of the incorrectly assembled regions around a break-point, but can be switched off if a user does not want any sequence to be removed from the assembly. To prevent excessive clipping, misassemblies separated by less than the trimming distance are grouped together, the contig is broken at the start and end of the misassembled region and the misassembled section is discarded. Low-scoring regions within the trimming distance of the ends of contigs are not considered misassemblies, as the high proportion of mate pairs aligning here whose mate maps to a different contig reduces the number of pairs under consideration and hence lowers the observed Z-score. This also ensures that circular molecules, such as small plasmids, which are assembled into a single contig, are not truncated because of mate pairs at either end of the assembly that appear to span the entire contig, but which are spatially close when circularisation is considered.
 
 \subsection*{Availability and Dependencies}
 NxRepair is available for free anonymous download from the Python Package Index (PyPI) here: \url{:https://pypi.python.org/pypi/nxrepair}.
@@ -139,17 +143,17 @@ Nine bacterial genomes were prepared according to the Nextera mate pair protocol
 \begin{table}[]
 \begin{center}
 {\begin{tabular}{lllllll}\hline
- & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{4}{l}{After NxRepair} \\\hline
-Genome & No. & NGA50 & No. & NGA50 \\\midrule
-Bcer & 3 & 1157404 & 3 & 1157404 \\
-EcDH & 8 & 576143 & 8 & 576143 \\
-EcMG & 2 & 640732 & 2 & 640732 \\
-List & 0 & 1496615 & 0 & 1496615 \\
-Meio & 0 & 3095733 & 0 & 3095733 \\
-ped & 6 & 1269259 & 0 & 1269259 \\
-pneu & 7 & 577220 & 6 & 577220 \\
-Rhod & 9 & 3181390 & 9 & 3181390 \\
-TB & 70 & 184170 & 66 & 158885 \\\hline
+ & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{2}{l}{{\bf After NxRepair}} & \multicolumn{2}{l}{After A5qc} \\\hline
+Genome & No. & NGA50 & No. & NGA50 & No. & NGA50 \\\midrule
+Bcer & 0 & 1157846 & 0 & 1157846 & 0 & 1157846 \\
+EcDH & 7 & 573003 & 6 & 573003 & 7 & 573003 \\
+EcMG & 3 & 693692 & 3 & 693692 & 3 & 693692\\
+List & 0 & 1496613 & 0 & 1496613 & 0 & 1496613 \\
+Meio & 0 & 2702549 & 0 & 2702549 & 0 & 2702549 \\
+ped & 1 & 1269147 & 0 & 952558 & 1 & 1269147 \\
+pneu & 8 & 578813 & 8 & 578813 & 15 & 647909 \\
+Rhod & 8 & 2715434 & 8 & 2715434 & 8 & 2715434 \\
+TB & 63 & 186136 & 57 & 186136 & 63 & 186136 \\\hline
 \end{tabular}}{}
 \end{center}
 \caption{Number of large misassemblies and NGA50 as reported by QUAST before and after NxRepair correction. \label{tab:improvement}}
@@ -204,7 +208,7 @@ The initial assembly quality was evaluated using QUAST~\citep{gurevich2013} (ver
 
 \texttt{samtools index sample.bam}
 
-We identified misassemblies using NxRepair as follows:
+We identified misassemblies using NxRepair (version 0.13) as follows:
 
 \texttt{python nxrepair.py sample.bam   sample/scaffolds.fasta sample\_scores.csv  sample\_new.fasta -img\_name sample\_new}
 
@@ -234,7 +238,7 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 
 
 \section*{Results and Discussion}
-We used NxRepair to correct \textit{de novo} assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for five genomes, two of which contained no large errors, no errors were found and the assembly was unchanged. We note that in the case of the TB genome, the NGA50 was slightly reduced by NxRepair correction. Manual inspection of the correction sites revealed that one of the misassemblies reported by NxRepair was a join between two contigs which consisted of a gap of over 2 kb bridged by very few mate pairs. This join is reported as correct by QUAST, but has only little support from the read data. We fail to correct some misassemblies because they do not exhibit a signal given the wide insert size distribution of the Nextera mate pairs.
+We used NxRepair to correct \textit{de novo} assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for six genomes, three of which contained no large errors, no errors were found and the assembly was unchanged. We are not able to correct all misassemblies, as not all misassemblies exhibit a change in Z-scoore large enough to identify an error against the background score fluctuation caused by the wide insert size distribution of the Nextera mate pairs.
 
 \subsection*{Performance}
 We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in Table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 

@@ -40,6 +40,7 @@ Clark, S.~C., Egan, R., Frazier, P.~I., and Wang, Z. (2013).
 Coil, D., Jospin, G., and Darling, A.~E. (2014).
 \newblock {A5-miseq}: an updated pipeline to assemble microbial genomes from
   illumina {MiSeq} data.
+\newblock {\em Bioinformatics}.
 
 \bibitem[Compeau et~al., 2011]{compeau2011}
 Compeau, P. E.~C., Pevzner, P.~A., and Tesler, G. (2011).
@@ -72,6 +73,15 @@ Hunter, J.~D. (2007).
 \newblock Matplotlib: A {2D} graphics environment.
 \newblock {\em Computing In Science and Engineering}, 9(3):90--95.
 
+\bibitem[Illumina, 2012]{nextera2012}
+Illumina (2012).
+\newblock Data procesing of nextera mate pair reads on illumina sequencing
+  platforms.
+\newblock
+  \url{http://www.illumina.com/documents/products/technotes/technote_nextera_m%
+atepair_data_processing.pdf}.
+\newblock Accessed: 2015-02-05.
+
 \bibitem[Li, 2013]{li2013}
 Li, H. (2013).
 \newblock Aligning sequence reads, clone sequences and assembly contigs with
@@ -95,6 +105,11 @@ Salzberg, S.~L., Phillippy, A.~M., Zimin, A., Puiu, D., Magoc, T., Koren, S.,
 \newblock {GAGE}: A critical evaluation of genome assemblies and assembly
   algorithms.
 \newblock {\em Genome Res.}, 22(3):557--567.
+
+\bibitem[Tritt et~al., 2012]{tritt2012}
+Tritt, A., Eisen, J.~A., Facciotti, M., and Darline, A.~E. (2012).
+\newblock An integrated pipeline for de novo assembly of microbial genomes.
+\newblock {\em PLoS ONE}, 7(9):e42304.
 
 \bibitem[van~der Walt et~al., 2011]{numpy}
 van~der Walt, S., Colbert, S.~C., and Varoquaux, G. (2011).
