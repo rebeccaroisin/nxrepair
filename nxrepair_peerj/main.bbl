@@ -52,6 +52,12 @@ Cormen, T.~H., Leiserson, C.~E., Rivest, R.~L., and Stein, C. (2009).
 \newblock {\em Introduction to Algorithms}.
 \newblock MIT Press and McGraw-Hill.
 
+\bibitem[Fullwood et~al., 2009]{Fullwood2009}
+Fullwood, M.~J., Wei, C.-L., Liu, E.~T., and Y., R. (2009).
+\newblock Next-generation dna sequencing of paired-end tags (pet) for
+  transcriptome and genome analyses.
+\newblock {\em Genome Res.}, 19:521--532.
+
 \bibitem[Ghodsi et~al., 2013]{Ghodsi2013}
 Ghodsi, M., Hill, C.~M., Astrovskaya, I., Lin, H., and Sommer, D.~D. (2013).
 \newblock De novo likelihood-based measures for comparing genome assemblies.
