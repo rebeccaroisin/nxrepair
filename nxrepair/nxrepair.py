@@ -401,6 +401,8 @@ class aligned_assembly:
                 stock_probabilities[ref] = [positions, np.array(probabilities)]
         p_mean = np.mean(np.array(all_probabilities)) # get contig mean and variance
         p_std = np.std(np.array(all_probabilities))
+        if p_std == 0:
+            p_std = 0.01
 
         for ref, [positions, probs] in stock_probabilities.iteritems():
             zscore = (probs - p_mean) / p_std # calculate position z score from contig mean, std
