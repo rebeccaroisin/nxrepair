@@ -31,11 +31,17 @@ Scaffolding errors and incorrect traversals of the de Bruijn graph during \texti
 \thispagestyle{empty}
 
 \section*{Introduction}
+% To do in introduction:
+% * better introduction of genome assembly and definitions (mate pair, insert size, paired end)
+% * better introduction of other tools
+% * state that we benchmark against A5 as currently most used
+% * state utility: also useful when mate pairs used to make scaffolds
+
 De Bruijn graph construction and traversal is a popular method for \textit{de novo} genome assembly~\citep{compeau2011}. However, traversal of repeat regions, which tangle the de Bruijn graph, remains challenging. Read pairs with a large insert size, such as the Illumina Nextera mate pairs~\citep{nextera2012} can provide additional information for repeat disambiguation. Many assemblers incorporate mate pair insert size information into the assembly and scaffolding process~\citep{Bankevich2012, zerbino2008}, but large scale scaffolding errors can still occur (Fig.~\ref{fig:NxRepair} (A)). 
 
-Error correction in \textit{de novo} assemblies is a well-studied problem. Recent work, such as the Assemblathon~\citep{Bradnam2013} and GAGE~\citep{Salzberg2012} collaborations, compare the quality of assemblies prepared by various assemblers. A Bayesian method of assembly quality evaluation also exists~\citep{Ghodsi2013}. Several recent papers have developed error identification and correction methods. The A5 Assembly Pipeline~\citep{Coil2014, tritt2012} includes an error detection and rescaffolding step and two new tools, REAPR~\citep{Hunt2013} and ALE~\citep{Clark2013} use read pair data to identify misassemblies. A similar tool is currently under development at the Broad Institute~\citep{pilon2014}. However with the exception of ALE, which is no longer actively maintained, these tools are not optimised to use mate pair information.  
+Error correction and quality evaluation of \textit{de novo} assemblies is a well-studied problem. Recent work, such as the Assemblathon~\citep{Bradnam2013} and GAGE~\citep{Salzberg2012} collaborations, compare the quality of assemblies prepared by various assemblers. A Bayesian method of assembly quality evaluation also exists~\citep{Ghodsi2013}. Several recent papers have developed error identification and correction methods. The most well-known of these is the A5 Assembly Pipeline~\citep{Coil2014, tritt2012}, which includes an error detection and rescaffolding step that makes use of mate pair alignment information. Two new tools, REAPR~\citep{Hunt2013} and ALE~\citep{Clark2013} have also been developed to use read pair data to identify misassemblies. A similar tool is currently under development at the Broad Institute~\citep{pilon2014}. However, with the exception of ALE, which is no longer actively maintained, these newer tools are not optimised to use mate pair information.  
 
-Here we introduce NxRepair, an assembly error detection tool that can identify the most serious misassemblies, without using a reference sequence, by examining the distribution of Nextera mate pair insert sizes. NxRepair specifically targets the most serious misassemblies by identifying regions with a high number of anomalous insert sizes, breaking the scaffold and optionally trimming out the misassembled region. NxRepair is complementary to existing tools, as it specifically uses Nextera mate pair information to find the largest and most serious misassemblies.
+Here we introduce NxRepair, an assembly error detection tool that can identify the most serious misassemblies, without using a reference sequence, by examining the distribution of Nextera mate pair insert sizes.  NxRepair specifically targets the most serious misassemblies by identifying regions with a high number of anomalous insert sizes, breaking the scaffold and optionally trimming out the misassembled region. NxRepair is complementary to existing tools, as it specifically uses Nextera mate pair information to find the largest and most serious misassemblies.
 
 \begin{figure*}
 \centerline{\includegraphics[width=0.8\textwidth]{fig1_nxrepair.pdf}}
@@ -46,9 +52,9 @@ Here we introduce NxRepair, an assembly error detection tool that can identify t
 \subsection*{Statistical Analysis of Mate Pair Insert Sizes}
 Nextera mate pair libraries are prepared to have a certain insert size, typically between 1 and 10 kb. When the mate pairs used to prepare an assembly are aligned back to the assembly, large misassemblies result in unusual insert sizes and read orientations. We model this using a two-component mixture distribution. The first component of this mixture is the insert size distribution of correctly aligned mate pairs.  We model the distribution of insert sizes, $Y$, as a normal distribution with mean $\hat{\mu}$ and standard deviation $\hat{\sigma}$: $Y \sim N(\hat{\mu},\hat{\sigma}^2).$ We estimate $\hat{\mu}$ and $\hat{\sigma}$ for the entire genome by aligning reads back to the assembly and using robust estimators (see below). The second component, defined as a uniform distribution across the contig size $U(0,L)$ for a contig of length $L$, captures anomalous insert sizes. 
 
-A uniform distribution was selected to model insert sizes, as it makes no assumption about the 
+A uniform distribution was selected to model insert sizes, as it makes no assumption about the cause of an anomaly. 
 
-To calculate the degree of support for the assembly at each site across a contig, NxRepair retrieves all mate pairs spanning the region $[i-W, i+W]$, of size $2W-1$ at position $i$ on the contig. The default value of $W$ is 200 bases (see Table~\ref{tab:parameters}). We define a latent indicator variable $X_l\in\{0,1\}$ for each pair of reads, $l$, which takes the value $1$ if the insert size came from the null distribution, and $0$ otherwise. Within each window queried, the probability that each retrieved read, $r_l$ is drawn from the null distribution is given by:
+To calculate the degree of support for the assembly at each site across a contig, NxRepair retrieves all mate pairs spanning the region $[i-W, i+W]$, of size $2W-1$ at position $i$ on the contig, where spanning is defined to mean that  The default value of $W$ is 200 bases (see Table~\ref{tab:parameters}). We define a latent indicator variable $X_l\in\{0,1\}$ for each pair of reads, $l$, which takes the value $1$ if the insert size came from the null distribution, and $0$ otherwise. Within each window queried, the probability that each retrieved read, $r_l$ is drawn from the null distribution is given by:
 
 \begin{eqnarray} P(X_l=x|Y_l)& =& \frac{P(X_l=x)(Y_l|X_l=x)}{\sum_{k=0}^1P(X_l=k)(Y_l|X_l=k)}\\
   & =& \frac{\pi_x(Y_l|X_l=x)}{\sum_{k=0}^1 \pi_k(Y_l|X_l=k)}
@@ -80,13 +86,15 @@ Within each contig, the contig assembly support mean $\mu_D$ and variance $s_D$ 
 \label{eq:contigD}
 \end{equation}
 
-Using these values, the Z-score $z_l$ within each queried interval is calculated as: 
+We use these contig specific mean and variance, rather than the global values, to prevent local variations in coverage from either causing false positives or masking changes in the insert size distribution. Using these values, the Z-score $z_l$ within each queried interval is calculated as: 
 
 \begin{equation}
 z_l = \frac{D_l - \hat{\mu}_D}{s_D}
 %\hat{\mu} = \frac{\sum_l^N D_l}{N} \qquad \s = \frac{\sum_l^N \sqrt{(D_l - \hat{\mu})^2}}{N}
 \label{eq:zscore}
 \end{equation}
+
+The Z-score is sensitive both to local changes in the insert size distribution, and to large variations in the number of correctly aligned mate pairs, for example caused by a large number of reads with a mate aligning to a different contig. This ensures that NxRepair can identify misassemblies occurring both within and between contigs.  
 
 A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (default value -4). This threshold describes the number of standard deviations below the mean assembly support that is required to identify an anomaly. The default value of -4 will flag only positions whose assembly support is less than four standard deviations below the mean level of support.
 
