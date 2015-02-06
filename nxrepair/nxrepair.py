@@ -545,23 +545,23 @@ class aligned_assembly:
                     print "breaking contig"
                     if (s - prev > trim) and ((length - s) > trim): 
                         print "breaking here:", s
-                        newcontigs.append(dna[int(prev):int(s-trim)]) # trim and append section before break
+                        newcontigs.append((contig,dna[int(prev):int(s-trim)])) # trim and append section before break
                         prev = s + trim # trim other end of break
                     else:
                         print "Too small!"
-                newcontigs.append(dna[int(prev):])
+                newcontigs.append((contig,dna[int(prev):]))
             else:
-                newcontigs.append(dna)
+                newcontigs.append((contig,dna))
 
         # write new contigs to file
         newcontigs.sort(lambda x,y: cmp(len(x), len(y)),reverse=True)
         print "Writing new fasta..."
-        for count, dna in enumerate(newcontigs):
-            name = ">CONTIG_%d_length_%d"%(count,len(dna))
+        for count, tup in enumerate(newcontigs):
+            name = ">CONTIG_%d_length_%d_%s"%(count,len(tup[1]),tup[0])
             print name
             outfile.write(name)
             outfile.write("\n")
-            outfile.write(dna)
+            outfile.write(tup[1])
             outfile.write("\n")    
 
 def main():
