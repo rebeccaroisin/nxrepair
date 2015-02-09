@@ -151,7 +151,7 @@ We have used the Interval Tree implementation from the bx-python library (\url{h
 
 \section*{Materials and Methods}
 \subsection*{Data}
-Eighteen genomes from nine bacteria were prepared according to the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The organisms sequenced and  are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. 
+Nine bacterial genomes were prepared according to the Nextera mate pair protocol and sequenced in duplicate in a single MiSeq run using $2 \times 151$ bp reads. The organisms sequenced and  are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. For performance optimisation, the first replicate from each genome sequenced was used as a training set. The test set, for performance evaluation, was formed from the second replicate of each genome. 
 
 \subsection*{Performance Optimisation}
 \subsubsection*{ROC Plots}
