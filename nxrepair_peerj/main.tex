@@ -151,30 +151,11 @@ We have used the Interval Tree implementation from the bx-python library (\url{h
 
 \section*{Materials and Methods}
 \subsection*{Data}
-Nine bacterial genomes were prepared according to the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The genomes sequenced are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. 
-
-\begin{table}[]
-\begin{center}
-{\begin{tabular}{lllllll}\hline
- & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{2}{l}{{\bf After NxRepair}} & \multicolumn{2}{l}{After A5qc} \\\hline
-Genome & No. & NGA50 & No. & NGA50 & No. & NGA50 \\\midrule
-Bcer & 0 & 1157846 & 0 & 1157846 & 0 & 1157846 \\
-EcDH & 7 & 573003 & 6 & 573003 & 7 & 573003 \\
-EcMG & 3 & 693692 & 3 & 693692 & 3 & 693692\\
-List & 0 & 1496613 & 0 & 1496613 & 0 & 1496613 \\
-Meio & 0 & 2702549 & 0 & 2702549 & 0 & 2702549 \\
-ped & 1 & 1269147 & 0 & 952558 & 1 & 1269147 \\
-pneu & 8 & 578813 & 8 & 578813 & 15 & 647909 \\
-Rhod & 8 & 2715434 & 8 & 2715434 & 8 & 2715434 \\
-TB & 63 & 186136 & 57 & 186136 & 63 & 186136 \\\hline
-\end{tabular}}{}
-\end{center}
-\caption{Number of large misassemblies and NGA50 as reported by QUAST before and after NxRepair correction. \label{tab:improvement}}
-\end{table}  
+Eighteen genomes from nine bacteria were prepared according to the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The organisms sequenced and  are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. 
 
 \subsection*{Performance Optimisation}
 \subsubsection*{ROC Plots}
-To optimise the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
+To optimise the threshold in $Z$ below which to identify a misassembled region, we prepared ROC plots using Replicate 1 of each genome, varying the threshold value, $T$, in steps of 1 between -10 and 0. 
 
 The positions of true misassemblies were identified by aligning each \textit{de novo} assembly to its reference genome using QUAST~\citep{gurevich2013}. To correctly compare the sites of true misassemblies with those identified by NxRepair, we divided each contig of the assembly into short stretches of 1 kb length. We then prepared an array, $A_{Nx}$ of size $\frac{L}{1000}$ for contig length $L$, corresponding to misassemblies identified by NxRepair. $A_{Nx}$ was filled as follows:
 
@@ -251,7 +232,29 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 
 
 \section*{Results and Discussion}
-We used NxRepair to correct \textit{de novo} assemblies from nine bacterial genomes. The genomes used are described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement}. For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for six genomes, three of which contained no large errors, no errors were found and the assembly was unchanged. We are not able to correct all misassemblies, as not all misassemblies exhibit a change in Z-scoore large enough to identify an error against the background score fluctuation caused by the wide insert size distribution of the Nextera mate pairs.
+We used NxRepair to correct \textit{de novo} assemblies from Replicate 2 of each of the nine bacterial genomes described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement} (middle column). For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for six genomes, three of which contained no large errors, no errors were found and the assembly was unchanged. We are not able to correct all misassemblies, as not all misassemblies exhibit a change in Z-scoore large enough to identify an error against the background score fluctuation caused by the wide insert size distribution of the Nextera mate pairs. 
+
+To benchmark NxRepair's performance, we also attempted to identify assembly errors using the A5qc error correction module of the A5 Assembly pipeline~\ref{tritt2012}. The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (pneu), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding using the A5 scaffolder did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. Consequently, we are confident that, for these high-quality alignments, NxRepair is a superior error-detection tool. 
+
+\begin{table}[]
+\begin{center}
+{\begin{tabular}{lllllll}\hline
+ & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{2}{l}{{\bf After NxRepair}} & \multicolumn{2}{l}{After A5qc} \\\hline
+Genome & No. & NGA50 & No. & NGA50 & No. & NGA50 \\\midrule
+Bcer & 0 & 1157846 & 0 & 1157846 & 0 & 1157846 \\
+EcDH & 7 & 573003 & 6 & 573003 & 7 & 573003 \\
+EcMG & 3 & 693692 & 3 & 693692 & 3 & 693692\\
+List & 0 & 1496613 & 0 & 1496613 & 0 & 1496613 \\
+Meio & 0 & 2702549 & 0 & 2702549 & 0 & 2702549 \\
+ped & 1 & 1269147 & 0 & 952558 & 1 & 1269147 \\
+pneu & 8 & 578813 & 8 & 578813 & - & - \\
+Rhod & 8 & 2715434 & 8 & 2715434 & 8 & 2715434 \\
+TB & 63 & 186136 & 57 & 186136 & 63 & 186136 \\\hline
+\end{tabular}}{}
+\end{center}
+\caption{Number of large misassemblies and NGA50 as reported by QUAST before (left) and after correction by NxRepair (middle) and A5qc (right). \label{tab:improvement}}
+\end{table}  
+
 
 \subsection*{Performance}
 We evaluated the runtime and peak memory usage of NxRepair on each of the nine genomes analysed. The results are shown in Table~\ref{tab:performance}. The most memory and computationally intensive part of the NxRepair analysis is construction of the interval trees. The size of each interval tree is dependent on the contig size. Consequently, we expect both runtime and memory usage to scale with the size of the largest contig. 
