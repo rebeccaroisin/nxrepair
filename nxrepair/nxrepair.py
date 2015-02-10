@@ -538,26 +538,22 @@ class aligned_assembly:
         for contig, length in self.refdict.iteritems():
             #dna = self.fasta[contig] # sequence of contig
             dna = self.fasta.fetch(reference=contig) # sequence of contig
+            assert len(dna) > 0
             if contig in breakpoints:
                 splits = breakpoints[contig]
                 splits.sort()
                 prev = 0
                 for s in splits: # iterate through breakpoints
                     print s
-                    print "breaking contig"
                     if (s - prev > trim) and ((length - s) > trim): 
-                        print "breaking here:", s
                         newcontigs.append((contig,dna[int(prev):int(s-trim)])) # trim and append section before break
                         prev = s + trim # trim other end of break
-                    else:
-                        print "Too small!"
                 newcontigs.append((contig,dna[int(prev):]))
             else:
                 newcontigs.append((contig,dna))
 
         # write new contigs to file
         newcontigs.sort(lambda x,y: cmp(len(x), len(y)),reverse=True)
-        print "Writing new fasta..."
         for count, tup in enumerate(newcontigs):
             name = ">CONTIG_%d_length_%d_%s"%(count,len(tup[1]),tup[0])
             print name
