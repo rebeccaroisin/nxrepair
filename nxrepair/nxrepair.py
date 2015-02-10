@@ -28,7 +28,6 @@ import pysam
 import collections
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy import stats
 from intervalNode import IntervalNode
 
@@ -493,6 +492,7 @@ class aligned_assembly:
 
             if img_name != None:
                 # plot zscores and anomalies
+                import matplotlib.pyplot as plt
                 fig, ax1 = plt.subplots()
                 plt.subplots_adjust(bottom=0.15)
                 ax1.set_xlim([0, max(map_positions)])
