@@ -108,11 +108,11 @@ A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (defau
 NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the \textit{de novo} assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation and pairs whose insert size exceed 30 kb (approximately 10 times the mean insert size). Pairs whose mapping quality falls below a user specified threshold (minmapq, default value 40) are also excluded, removing reads that are not uniquely mapped from the calculation of global parameters. The global mean $\hat{\mu}$ and median absolute deviation $\text{MAD}$ are calculated across all contigs in the assembly as:
 
 \begin{equation}
-\hat{\mu} = \frac{\sum_{l=1}^N Y_l}{N} \qquad \text{MAD} = \text{median}(|Y_l - \text{median}(Y_l)|)
+\hat{\mu} = \frac{\sum_{l=1}^N Y_l}{N} \qquad \text{MAD} = \text{median}_m(|Y_m - \text{median}_l(Y_l)|)
 \label{eq:global}
 \end{equation}
 
-where $Y_l$ is the insert size of the $l$th of $N$ reads with correct pairing behaviour. The standard deviation was then calculated from the MAD, using:
+where $\text{median}_l(Y_l)$ is the median insert size of reads with correct pairing behaviour and $|Y_m - \text{median}_l(Y_l)|$ is the absolute value of the residual from the median of the $m$th on $N$ reads. The standard deviation was then calculated from the MAD, using:
 
 \begin{equation}
 \hat{\sigma} = K \cdot \text{MAD}
