@@ -28,7 +28,6 @@ import pysam
 import collections
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy import stats
 from intervalNode import IntervalNode
 
@@ -401,6 +400,8 @@ class aligned_assembly:
                 stock_probabilities[ref] = [positions, np.array(probabilities)]
         p_mean = np.mean(np.array(all_probabilities)) # get contig mean and variance
         p_std = np.std(np.array(all_probabilities))
+        if p_std == 0:
+            p_std = 0.01
 
         for ref, [positions, probs] in stock_probabilities.iteritems():
             zscore = (probs - p_mean) / p_std # calculate position z score from contig mean, std
@@ -491,6 +492,7 @@ class aligned_assembly:
 
             if img_name != None:
                 # plot zscores and anomalies
+                import matplotlib.pyplot as plt
                 fig, ax1 = plt.subplots()
                 plt.subplots_adjust(bottom=0.15)
                 ax1.set_xlim([0, max(map_positions)])
@@ -536,26 +538,22 @@ class aligned_assembly:
         for contig, length in self.refdict.iteritems():
             #dna = self.fasta[contig] # sequence of contig
             dna = self.fasta.fetch(reference=contig) # sequence of contig
+            assert len(dna) > 0
             if contig in breakpoints:
                 splits = breakpoints[contig]
                 splits.sort()
                 prev = 0
                 for s in splits: # iterate through breakpoints
                     print s
-                    print "breaking contig"
                     if (s - prev > trim) and ((length - s) > trim): 
-                        print "breaking here:", s
                         newcontigs.append((contig,dna[int(prev):int(s-trim)])) # trim and append section before break
                         prev = s + trim # trim other end of break
-                    else:
-                        print "Too small!"
                 newcontigs.append((contig,dna[int(prev):]))
             else:
                 newcontigs.append((contig,dna))
 
         # write new contigs to file
         newcontigs.sort(lambda x,y: cmp(len(x), len(y)),reverse=True)
-        print "Writing new fasta..."
         for count, tup in enumerate(newcontigs):
             name = ">CONTIG_%d_length_%d_%s"%(count,len(tup[1]),tup[0])
             print name
