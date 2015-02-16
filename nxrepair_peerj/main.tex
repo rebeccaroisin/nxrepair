@@ -152,7 +152,7 @@ We have used the Interval Tree implementation from the bx-python library (\url{h
 
 \section*{Materials and Methods}
 \subsection*{Data}
-Nine bacterial genomes were prepared according to the Nextera mate pair protocol and sequenced in duplicate in a single MiSeq run using $2 \times 151$ bp reads. The organisms sequenced and  are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. For performance optimisation, the first replicate from each genome sequenced was used as a training set. The test set, for performance evaluation, was formed from the second replicate of each genome. 
+Nine bacterial genomes were prepared according to the Nextera mate pair protocol and sequenced in duplicate in a single MiSeq run using $2 \times 151$ bp reads. The organisms sequenced are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. Table~\ref{tab:yield} gives an overview of sequencing yield, mean quality and read length after trimming. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. For performance optimisation, the first replicate from each genome sequenced was used as a training set. The test set, for performance evaluation, was formed from the second replicate of each genome. 
 
 \subsection*{Performance Optimisation}
 \subsubsection*{ROC Plots}
@@ -235,7 +235,7 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 \section*{Results and Discussion}
 We used NxRepair to correct \textit{de novo} assemblies from Replicate 2 of each of the nine bacterial genomes described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement} (middle column). For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for six genomes, three of which contained no large errors, no errors were found and the assembly was unchanged. We are not able to correct all misassemblies, as not all misassemblies exhibit a change in Z-score large enough to identify an error against the background score fluctuation caused by the wide insert size distribution of the Nextera mate pairs. 
 
-To benchmark NxRepair's performance, we also attempted to identify assembly errors using the A5qc error correction module of the A5 Assembly pipeline~\cite{tritt2012}. The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (pneu), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding using the A5 scaffolder did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. Consequently, we are confident that, for these high-quality alignments, NxRepair is a superior error-detection tool. 
+To benchmark NxRepair's performance, we also attempted to identify assembly errors using the A5qc error correction module of the A5 Assembly pipeline~\citep{tritt2012}. The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (pneu), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding using the A5 scaffolder did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. Consequently, we are confident that, for these high-quality alignments, NxRepair is a superior error-detection tool. 
 
 Despite this good performance, it is clear that NxRepair is not able to find all misassemblies present. There are several reasons for this. Firstly, NxRepair's resolution is limited to relatively large-scale errors, as a very large disruption in mate pair insert sizes over a region of approximately 1 kb to significantly reduce the Z-score. Consequently, indel errors with a displacement smaller than 1 kb will not be detected. Secondly, NxRepair is limited by the intrinsic error rate of the mate pair library used. If the insert size distribution has a very wide variance, large fluctuations caused by assembly errors will be masked, making error correction more challenging. 
 
@@ -245,6 +245,7 @@ Furthermore, NxRepair currently uses a user-defined prior probability of incorre
 
 \begin{table}[]
 \begin{center}
+\resizebox{\textwidth}{!}{
 {\begin{tabular}{llllllll}\hline
  & & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{2}{l}{{\bf After NxRepair}} & \multicolumn{2}{l}{After A5qc} \\\hline
 Genome & Genome size & No. & NGA50 & No. & NGA50 & No. & NGA50 \\\midrule
@@ -258,6 +259,7 @@ K. pneumoniae MGH 78578 & 5,694,894 & 8 & 578,813 & 8 & 578,813 & - & - \\
 R. sphaeroides 2.4.1 & 4,602,977 & 8 & 2,715,434 & 8 & 2,715,434 & 8 & 2,715,434 \\
 M. tuberculosis H37Ra & 4,411,532 & 63 & 186,136 & 57 & 186,136 & 63 & 186,136 \\\hline
 \end{tabular}}{}
+}
 \end{center}
 \caption{Number of large misassemblies and NGA50 as reported by QUAST before (left) and after correction by NxRepair (middle) and A5qc (right). \label{tab:improvement}}
 \end{table}  
@@ -340,6 +342,35 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
 }
   \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).\label{data-description}}
 \end{table}
+
+\begin{table}[]
+\begin{center}
+\resizebox{\textwidth}{!}{
+{\begin{tabular}{llll}\hline
+Genome & Yield [bp] & Mean base quality & Mean read length \\\midrule
+B. cereus lib1 & 140,034,231 & 30.83 & 120.50  \\
+B. cereus lib2 & 150,883,336 & 31.69 & 124.08  \\
+E. coli DH10B lib1 & 229,164,175 & 31.50 & 127.55 \\
+E. coli DH10B lib2 & 167,955,255 & 31.19 & 126.49 \\
+E. coli MG1655 lib1 & 138,893,204 & NaN & 104.56 \\
+E. coli MG1655 lib2 & 164,490,239 & 31.93 & 129.67 \\
+L. monocytogenes lib1 & 197,796,210 & 32.66 & 129.79 \\
+L. monocytogenes lib2 & 161,114,700 & 31.81 & 125.79 \\
+M. ruber lib1 & 180,542,545 & 29.96 & 123.69 \\
+M. ruber lib2 & 150,298,958 & 31.09 & 129.40 \\
+P. heparinus lib1 & 186,070,764 & 32.21 & 127.30 \\
+P. heparinus lib2 & 146,448,694 & 31.32 & 124.00 \\
+K. pneumoniae lib1 & 182,614,602 & 31.86 & 131.70 \\
+K. pneumoniae lib2 & 166,306,322 & 31.82 & 130.28 \\
+R. sphaeroides lib1 & 184,138,610 & 30.08 & 127.99 \\
+R. sphaeroides lib2 & 210,961,284 & 30.12 & 129.79 \\
+M. tuberculosis lib1 & 211,892,634 & 30.43 & 127.37 \\
+M. tuberculosis lib2 & 177,615,358 & 30.06 & 126.82 \\\hline
+\end{tabular}}{}
+}
+\end{center}
+\caption{Yield in bp, mean base quality and average read length after adapter removal \label{tab:yield}}
+\end{table}  
 
 \section*{Conclusions}
 NxRepair is a simple error correction module that can be used to rapidly identify and remove large scale errors from \textit{de novo} assemblies using Nextera mate pair reads. We evaluated NxRepair using \textit{de novo} assemblies nine bacterial genomes prepared using the SPAdes assembler, showing that of the six genomes containing misassemblies, three could be improved by NxRepair correction; compared with no improvements made by the A5qc module. SPAdes is the current state of the art in bacterial genome assembly and explicitly uses mate pair information during both contig construction and scaffolding. Even in these excellent assemblies, NxRepair could identify misassemblies and improve the assembly quality. We predict that NxRepair will be even more useful for identifying errors in \textit{de novo} assemblies where mate pair information was used only at the scaffolding stage. NxRepair is freely available online. It can be downloaded from the Python Package Index (\url{https://pypi.python.org/pypi/nxrepair}) and run with a single call from the command line, making it an attractive option for fast evaluations of and improvements to assembly quality. The source code is available on GitHub (\url{https://github.com/rebeccaroisin/nxrepair}), facilitating easy incorporation into user assembly pipelines.  
