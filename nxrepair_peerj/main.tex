@@ -245,18 +245,18 @@ Furthermore, NxRepair currently uses a user-defined prior probability of incorre
 
 \begin{table}[]
 \begin{center}
-{\begin{tabular}{lllllll}\hline
- & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{2}{l}{{\bf After NxRepair}} & \multicolumn{2}{l}{After A5qc} \\\hline
-Genome & No. & NGA50 & No. & NGA50 & No. & NGA50 \\\midrule
-Bcer & 0 & 1157846 & 0 & 1157846 & 0 & 1157846 \\
-EcDH & 7 & 573003 & 6 & 573003 & 7 & 573003 \\
-EcMG & 3 & 693692 & 3 & 693692 & 3 & 693692\\
-List & 0 & 1496613 & 0 & 1496613 & 0 & 1496613 \\
-Meio & 0 & 2702549 & 0 & 2702549 & 0 & 2702549 \\
-ped & 1 & 1269147 & 0 & 952558 & 1 & 1269147 \\
-pneu & 8 & 578813 & 8 & 578813 & - & - \\
-Rhod & 8 & 2715434 & 8 & 2715434 & 8 & 2715434 \\
-TB & 63 & 186136 & 57 & 186136 & 63 & 186136 \\\hline
+{\begin{tabular}{llllllll}\hline
+ & & \multicolumn{2}{l}{Before NxRepair} & \multicolumn{2}{l}{{\bf After NxRepair}} & \multicolumn{2}{l}{After A5qc} \\\hline
+Genome & Genome size & No. & NGA50 & No. & NGA50 & No. & NGA50 \\\midrule
+B. cereus ATCC 10987 & 5,432,652 & 0 & 1,157,846 & 0 & 1,157,846 & 0 & 1,157,846 \\
+E. coli K-12 substr. DH10B & 4,686,137 & 7 & 573,003 & 6 & 573,003 & 7 & 573,003 \\
+E. coli K-12 substr. MG1655 & 4,641,652  & 3 & 693,692 & 3 & 693,692 & 3 & 693,692\\
+L. monocytogenes EGDe & 2,944,528 & 0 & 1,496,613 & 0 & 1,496,613 & 0 & 1,496,613 \\
+M. ruber DSM 2366 & 4,839,203 & 0 & 2,702,549 & 0 & 2,702,549 & 0 & 2,702,549 \\
+P. heparinus DSM 2366 & 5,167,383 & 1 & 1,269,147 & 0 & 952,558 & 1 & 1,269,147 \\
+K. pneumoniae MGH 78578 & 5,694,894 & 8 & 578,813 & 8 & 578,813 & - & - \\
+R. sphaeroides 2.4.1 & 4,602,977 & 8 & 2,715,434 & 8 & 2,715,434 & 8 & 2,715,434 \\
+M. tuberculosis H37Ra & 4,411,532 & 63 & 186,136 & 57 & 186,136 & 63 & 186,136 \\\hline
 \end{tabular}}{}
 \end{center}
 \caption{Number of large misassemblies and NGA50 as reported by QUAST before (left) and after correction by NxRepair (middle) and A5qc (right). \label{tab:improvement}}
