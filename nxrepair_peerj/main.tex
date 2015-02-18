@@ -45,7 +45,7 @@ Here we introduce NxRepair, an assembly error detection tool that can identify t
 
 \begin{figure*}
 \centerline{\includegraphics[width=0.8\textwidth]{fig1_nxrepair.pdf}}
-\caption{Using NxRepair to remove large misassemblies. (A) Alignment of the \textit{de novo} assembly of the TB genome to its reference genome. The assembly contains several large misassemblies. (B) A plot of NxRepair's support metric against scaffold position for the TB assembly. Low support for the assembly is identified in three regions of a contig. (C) Breaking the contigs at the identified positions resolves the most significant misassemblies. In (A) and (C), horizontal lines demarcate the scaffold boundaries.}\label{fig:NxRepair}
+\caption{Using NxRepair to remove large misassemblies. (A) Alignment of the \textit{de novo} assembly of the M. tuberculosis genome to its reference genome. The assembly contains several large misassemblies. (B) A plot of NxRepair's support metric against scaffold position for the assembly. Low support for the assembly is identified in three regions of a contig. (C) Breaking the contigs at the identified positions resolves the most significant misassemblies. In (A) and (C), horizontal lines demarcate the scaffold boundaries.}\label{fig:NxRepair}
 \end{figure*}
 
 \section*{Implementation}
@@ -105,7 +105,7 @@ A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (defau
 \end{figure}
 
 \subsection*{Global Assembly Parameters}
-NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the \textit{de novo} assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation and pairs whose insert size exceed 30 kb (approximately 10 times the mean insert size). Pairs whose mapping quality falls below a user specified threshold (minmapq, default value 40) are also excluded, removing reads that are not uniquely mapped from the calculation of global parameters. The global mean $\hat{\mu}$ and median absolute deviation $\text{MAD}$ are calculated across all contigs in the assembly as:
+NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the \textit{de novo} assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation and pairs whose insert size exceed 30 kb (approximately 10 times the mean insert size). Pairs whose mapping quality falls below a user specified threshold (minmapq, default value 40) are also excluded, removing reads that are not uniquely mapped from the calculation of global parameters. The global mean $\hat{\mu}$ and median absolute deviation ($\text{MAD}$) are calculated across all contigs in the assembly as:
 
 \begin{equation}
 \hat{\mu} = \frac{\sum_{l=1}^N Y_l}{N} \qquad \text{MAD} = \text{median}_m(|Y_m - \text{median}_l(Y_l)|)
@@ -132,7 +132,7 @@ To facilitate rapid lookup of mate pair properties, we construct an interval tre
 To improve the quality of the \textit{de novo} assembly, a contig is broken into two separate pieces at the site of a misassembly. The broken ends of the two new contigs can optionally be trimmed by a user defined length (default 4 kb) to remove the misassembled region. Trimming allows removal of the incorrectly assembled regions around a break-point, but can be switched off if a user does not want any sequence to be removed from the assembly. To prevent excessive clipping, misassemblies separated by less than the trimming distance are grouped together, the contig is broken at the start and end of the misassembled region and the misassembled section is discarded. Low-scoring regions within the trimming distance of the ends of contigs are not considered misassemblies, as the high proportion of mate pairs aligning here whose mate maps to a different contig reduces the number of pairs under consideration and hence lowers the observed Z-score. This also ensures that circular molecules, such as small plasmids, which are assembled into a single contig, are not truncated because of mate pairs at either end of the assembly that appear to span the entire contig, but which are spatially close when circularisation is considered.
 
 \subsection*{Availability and Dependencies}
-NxRepair is available for free anonymous download from the Python Package Index (PyPI) here: \url{:https://pypi.python.org/pypi/nxrepair}.
+NxRepair is available for free anonymous download from the Python Package Index (PyPI) here: \url{https://pypi.python.org/pypi/nxrepair}.
 The source code, written in python is hosted on GitHub: \url{https://github.com/rebeccaroisin/nxrepair}.
 A full tutorial and API can be found on ReadTheDocs: \url{http://nxrepair.readthedocs.org/en/latest/}.
 
@@ -213,7 +213,7 @@ The default parameters used and their meanings are shown in Table~\ref{tab:param
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|c|c|p{8cm}|}
+\begin{tabular}{llp{8cm}}
     \hline
     Parameter & Default Value & Meaning \\ \hline
     imgname & None & Prefix under which to save plots. \\
@@ -236,7 +236,7 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 \section*{Results and Discussion}
 We used NxRepair to correct \textit{de novo} assemblies from Replicate 2 of each of the nine bacterial genomes described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement} (middle column). For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for six genomes, three of which contained no large errors, no errors were found and the assembly was unchanged. We are not able to correct all misassemblies, as not all misassemblies exhibit a change in Z-score large enough to identify an error against the background score fluctuation caused by the wide insert size distribution of the Nextera mate pairs. 
 
-To benchmark NxRepair's performance, we also attempted to identify assembly errors using the A5qc error correction module of the A5 Assembly pipeline~\citep{tritt2012}. The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (pneu), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding using the A5 scaffolder did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. Consequently, we are confident that, for these high-quality alignments, NxRepair is a superior error-detection tool. 
+To benchmark NxRepair's performance, we also attempted to identify assembly errors using the A5qc error correction module of the A5 Assembly pipeline~\citep{tritt2012}. The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (K. pneumoniae), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding using the A5 scaffolder did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. Consequently, we are confident that, for these high-quality alignments, NxRepair is a superior error-detection tool. 
 
 Despite this good performance, it is clear that NxRepair is not able to find all misassemblies present. There are several reasons for this. Firstly, NxRepair's resolution is limited to relatively large-scale errors, as a very large disruption in mate pair insert sizes over a region of approximately 1 kb to significantly reduce the Z-score. Consequently, indel errors with a displacement smaller than 1 kb will not be detected. Secondly, NxRepair is limited by the intrinsic error rate of the mate pair library used. If the insert size distribution has a very wide variance, large fluctuations caused by assembly errors will be masked, making error correction more challenging. 
 
@@ -271,18 +271,18 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{lll}
     \hline
     Bacterium & Total Time (s) & Memory Usage (MiB) \\ \hline
-    Bcer & 78 & 271 \\
-    EcDH & 123 & 444 \\
-    EcMG & 70 & 260 \\
-    list & 97 & 383 \\
-    meio & 259 & 565 \\
-    ped & 123 & 417 \\
-    pneu & 59 & 227 \\
-    rhod & 190 & 463 \\
-    TB & 155 & 411 \\ 
+    B. cereus ATCC 10987 & 78 & 271 \\
+    E. coli K-12 substr. DH10B & 123 & 444 \\
+    E. coli K-12 substr. MG1655 & 70 & 260 \\
+    L. monocytogenes EGDe & 97 & 383 \\
+    M. ruber DSM 2366 & 259 & 565 \\
+    P. heparinus DSM 2366 & 123 & 417 \\
+    K. pneumoniae MGH 78578 & 59 & 227 \\
+    R. sphaeroides 2.4.1 & 190 & 463 \\
+    M. tuberculosis H37RaTB & 155 & 411 \\ 
     \hline
 \end{tabular}
 \end{center}
@@ -346,7 +346,7 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
 
 \begin{table}[]
 \begin{center}
-\resizebox{\textwidth}{!}{
+{
 {\begin{tabular}{llll}\hline
 Genome & Yield [bp] & Mean base quality & Mean read length \\\midrule
 B. cereus lib1 & 140,034,231 & 30.83 & 120.50  \\
@@ -374,7 +374,7 @@ M. tuberculosis lib2 & 177,615,358 & 30.06 & 126.82 \\\hline
 \end{table}  
 
 \section*{Conclusions}
-NxRepair is a simple error correction module that can be used to rapidly identify and remove large scale errors from \textit{de novo} assemblies using Nextera mate pair reads. We evaluated NxRepair using \textit{de novo} assemblies nine bacterial genomes prepared using the SPAdes assembler, showing that of the six genomes containing misassemblies, three could be improved by NxRepair correction; compared with no improvements made by the A5qc module. SPAdes is the current state of the art in bacterial genome assembly and explicitly uses mate pair information during both contig construction and scaffolding. Even in these excellent assemblies, NxRepair could identify misassemblies and improve the assembly quality. We predict that NxRepair will be even more useful for identifying errors in \textit{de novo} assemblies where mate pair information was used only at the scaffolding stage. NxRepair is freely available online. It can be downloaded from the Python Package Index (\url{https://pypi.python.org/pypi/nxrepair}) and run with a single call from the command line, making it an attractive option for fast evaluations of and improvements to assembly quality. The source code is available on GitHub (\url{https://github.com/rebeccaroisin/nxrepair}), facilitating easy incorporation into user assembly pipelines.  
+NxRepair is a simple error correction module that can be used to rapidly identify and remove large scale errors from \textit{de novo} assemblies using Nextera mate pair reads. We evaluated NxRepair using \textit{de novo} assemblies of nine bacterial genomes prepared using the SPAdes assembler, showing that of the six genomes containing misassemblies, three could be improved by NxRepair correction; compared with no improvements made by the A5qc module. SPAdes is the current state of the art in bacterial genome assembly and explicitly uses mate pair information during both contig construction and scaffolding. Even in these excellent assemblies, NxRepair could identify misassemblies and improve the assembly quality. We predict that NxRepair will be even more useful for identifying errors in \textit{de novo} assemblies where mate pair information was used only at the scaffolding stage. NxRepair is freely available online. It can be downloaded from the Python Package Index (\url{https://pypi.python.org/pypi/nxrepair}) and run with a single call from the command line, making it an attractive option for fast evaluations of and improvements to assembly quality. The source code is available on GitHub (\url{https://github.com/rebeccaroisin/nxrepair}), facilitating easy incorporation into user assembly pipelines.  
 
 \section*{Acknowledgments}
 We thank Emma Carlson and Niall Gormley (Illumina Cambridge) for preparing the Nextera mate pair libraries.
