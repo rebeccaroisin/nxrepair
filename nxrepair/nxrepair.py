@@ -28,8 +28,12 @@ import pysam
 import collections
 import os
 import numpy as np
-from scipy import stats
 from intervalNode import IntervalNode
+
+def normpdf(x, mu=0, sigma=1):
+    u = float((x-mu) / abs(sigma))
+    y = exp(-u*u/2) / (sqrt(2*pi) * abs(sigma))
+    return y
 
 def meansd(frq):
 
@@ -136,7 +140,7 @@ def probability_of_readlength(read_length, mu, sigma, pi1, L):
     """
     p_0 = pi1 * (1 / float(L)) # anomaly
     # probability of drawing from a gaussian with mean mu and std sigma
-    p_1 = (1 - pi1) * stats.norm.pdf(read_length, loc=mu, scale=sigma) 
+    p_1 = (1 - pi1) * normpdf(read_length,mu,sigma)
 
     p_total = p_1 / (p_0 + p_1)
     return p_total
