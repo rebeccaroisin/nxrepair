@@ -33,9 +33,9 @@ from intervalNode import IntervalNode
 
 def normpdf(xl, mu=0, sigma=1):
     l = len(xl)
-    yl = np.zero(l)
+    yl = np.zeros(l)
     for i in range(0,l):
-        u = float((x-mu) / abs(sigma))
+        u = float((xl[i]-mu) / abs(sigma))
         yl[i] = math.exp(-u*u/2) / (math.sqrt(2*math.pi) * abs(sigma))
     return yl
 
