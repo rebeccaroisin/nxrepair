@@ -25,15 +25,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import pysam
+import math
 import collections
 import os
 import numpy as np
 from intervalNode import IntervalNode
 
-def normpdf(x, mu=0, sigma=1):
-    u = float((x-mu) / abs(sigma))
-    y = exp(-u*u/2) / (sqrt(2*pi) * abs(sigma))
-    return y
+def normpdf(xl, mu=0, sigma=1):
+    l = len(xl)
+    yl = np.zero(l)
+    for i in range(0,l):
+        u = float((x-mu) / abs(sigma))
+        yl[i] = math.exp(-u*u/2) / (math.sqrt(2*math.pi) * abs(sigma))
+    return yl
 
 def meansd(frq):
 
@@ -81,7 +85,7 @@ def MAD(frq):
     median = all_lengths[mid]
     residuals = sorted(abs(all_lengths - median)) # difference between val and median
     MAD = residuals[mid] # median of residuals
-    print MAD
+    #print MAD
     return median, MAD
 
 def find_intersections(tree, s, e):
@@ -279,6 +283,10 @@ class aligned_assembly:
         """
 
         bridges = self.read_stock[ref] 
+        # check if contig has any alignments
+        if not bridges:
+            return None
+
         # insert first interval into tree
         s1, e1, name, correct_strands = bridges[0]
         tree = IntervalNode(s1, e1, other=(name, correct_strands))
@@ -389,6 +397,8 @@ class aligned_assembly:
         for w, (ref, length) in enumerate(self.refdict.iteritems()):
             if length > self.min_size:
                 tree = self.make_tree(ref) # build tree from all reads aligning to a contig
+                if not tree:
+                    continue
                 positions = np.arange(self.step, length - self.window, self.step)
                 probabilities = []
                 for pos in positions:
@@ -560,7 +570,7 @@ class aligned_assembly:
         newcontigs.sort(lambda x,y: cmp(len(x), len(y)),reverse=True)
         for count, tup in enumerate(newcontigs):
             name = ">CONTIG_%d_length_%d_%s"%(count,len(tup[1]),tup[0])
-            print name
+            #print name
             outfile.write(name)
             outfile.write("\n")
             outfile.write(tup[1])
