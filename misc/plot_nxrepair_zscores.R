@@ -1,4 +1,5 @@
 library(ggplot2)
+library(Cairo)
 
 df <- read.table('nxrepair.csv',col.names=c("scaffold","pos","zscore"),as.is=T)
 
@@ -12,6 +13,7 @@ pp <- paste(sf,nums,sep="_")
 # Overwrite old scaffold names
 df[,1] <- as.factor(pp)
 
-png(file="zscores.per.scaffold.png",width=600,height=600)
+CairoPNG(file="zscores.per.scaffold.png",width=600,height=600)
+#png(file="zscores.per.scaffold.png",width=600,height=600)
 ggplot(df,aes(x=pos,y=zscore)) + geom_line() + facet_wrap(~scaffold,scales="free")
 dev.off()
