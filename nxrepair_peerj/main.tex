@@ -234,11 +234,13 @@ We used NxRepair to correct \textit{de novo} assemblies from Replicate 2 of each
 
 To benchmark NxRepair's performance, we also used the A5qc error correction module of the A5 Assembly pipeline~\citep{tritt2012} (version 20140604) to identify errors in the {\emph de novo} assemblies:
 
-\texttt{a5\_pipeline.pl --begin=4 --end=4 --preprocessed <lib\_file> <out\_base>}
+\texttt{a5\_pipeline.pl --begin=4 --end=4 bacteria.fastq.gz  bacteria}
+
+%Note that the A5qc tool, which is the fourth step in the five step A5qc pipeline, expects as input the files output from the upstream step. Hence, to achieve successful analysis, it was necessary to rename the {\emph de novo} assembly \textttt{.fasta} files containing the scaffolds to contain the suffix \textttt{.crude} -- \textttt{bacteria.crude.scaffolds.fasta} -- and to supply the prefix only (\textttt{bacteria}) as an argument to the error correction module.   
 
 The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (K. pneumoniae), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding these contigs using the A5 scaffolder:
 
-\texttt{a5\_pipeline.pl --begin=4 --end=5 --preprocessed <lib\_file> <out\_base>}
+\texttt{a5\_pipeline.pl --begin=4 --end=5 bacteria.fastq.gz  bacteria}
 
 did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. 
 
