@@ -350,33 +350,34 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
   \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). In addition, the trimmed reads are available at the European Nucleotide Archive (ENA) at \url{http://www.ebi.ac.uk/ena/data/view/PRJEB8559}.\label{data-description}}
 \end{table}
 
+
 \begin{table}[]
 \begin{center}
 {
-{\begin{tabular}{llll}\hline
-Genome & Yield [bp] & Mean base quality & Mean read length \\\midrule
-B. cereus lib1 & 140,034,231 & 30.83 & 120.50  \\
-B. cereus lib2 & 150,883,336 & 31.69 & 124.08  \\
-E. coli DH10B lib1 & 229,164,175 & 31.50 & 127.55 \\
-E. coli DH10B lib2 & 167,955,255 & 31.19 & 126.49 \\
-E. coli MG1655 lib1 & 138,893,204 & NaN & 104.56 \\
-E. coli MG1655 lib2 & 164,490,239 & 31.93 & 129.67 \\
-L. monocytogenes lib1 & 197,796,210 & 32.66 & 129.79 \\
-L. monocytogenes lib2 & 161,114,700 & 31.81 & 125.79 \\
-M. ruber lib1 & 180,542,545 & 29.96 & 123.69 \\
-M. ruber lib2 & 150,298,958 & 31.09 & 129.40 \\
-P. heparinus lib1 & 186,070,764 & 32.21 & 127.30 \\
-P. heparinus lib2 & 146,448,694 & 31.32 & 124.00 \\
-K. pneumoniae lib1 & 182,614,602 & 31.86 & 131.70 \\
-K. pneumoniae lib2 & 166,306,322 & 31.82 & 130.28 \\
-R. sphaeroides lib1 & 184,138,610 & 30.08 & 127.99 \\
-R. sphaeroides lib2 & 210,961,284 & 30.12 & 129.79 \\
-M. tuberculosis lib1 & 211,892,634 & 30.43 & 127.37 \\
-M. tuberculosis lib2 & 177,615,358 & 30.06 & 126.82 \\\hline
+{\begin{tabular}{lllll}\hline
+Genome & Yield [bp] & Mean base quality & Mean read length & Raw NGA50 \\\midrule
+B. cereus lib1 & 140,034,231 & 30.83 & 120.50 &  1,157,404\\
+B. cereus lib2 & 150,883,336 & 31.69 & 124.08  & 1,157,846\\
+E. coli DH10B lib1 & 229,164,175 & 31.50 & 127.55 & 576,143\\
+E. coli DH10B lib2 & 167,955,255 & 31.19 & 126.49 & 573,003\\
+E. coli MG1655 lib1 & 138,893,204 & NaN & 104.56 & 640,732\\
+E. coli MG1655 lib2 & 164,490,239 & 31.93 & 129.67 & 693,692\\
+L. monocytogenes lib1 & 197,796,210 & 32.66 & 129.79 & 1,496,615\\
+L. monocytogenes lib2 & 161,114,700 & 31.81 & 125.79 & 1,496,613\\
+M. ruber lib1 & 180,542,545 & 29.96 & 123.69 & 3,095,733\\
+M. ruber lib2 & 150,298,958 & 31.09 & 129.40 & 2,702,549\\
+P. heparinus lib1 & 186,070,764 & 32.21 & 127.30 & 1,269,259\\
+P. heparinus lib2 & 146,448,694 & 31.32 & 124.00 & 1,269,147\\
+K. pneumoniae lib1 & 182,614,602 & 31.86 & 131.70 & 577,220\\
+K. pneumoniae lib2 & 166,306,322 & 31.82 & 130.28 & 578,813\\
+R. sphaeroides lib1 & 184,138,610 & 30.08 & 127.99 & 3,181,390\\
+R. sphaeroides lib2 & 210,961,284 & 30.12 & 129.79 & 2,715,434\\
+M. tuberculosis lib1 & 211,892,634 & 30.43 & 127.37 & 184,170\\
+M. tuberculosis lib2 & 177,615,358 & 30.06 & 126.82 & 186,136\\\hline
 \end{tabular}}{}
 }
 \end{center}
-\caption{Yield in bp, mean base quality and average read length after adapter removal \label{tab:yield}}
+\caption{Yield in bp, mean base quality and average read length after adapter removal, as well as the raw NGA50 score prior to NxRepair analysis for all genomes analysed.\label{tab:yield}}
 \end{table}  
 
 \section*{Conclusions}
