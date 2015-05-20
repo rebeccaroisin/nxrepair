@@ -28,8 +28,21 @@ import pysam
 import math
 import collections
 import os
+import sys
 import numpy as np
 from intervalNode import IntervalNode
+
+def update_progress(progress):
+    barLength = 10 # Modify this to change the length of the progress bar
+    status = ""
+    if progress >= 1:
+        progress = 1
+        status = "Done...\r\n"
+    progress = round(progress,1)
+    block = int(round(barLength*progress))
+    text = "\rPercent: [{0}] {1}% {2}".format( "#"*block + "-"*(barLength-block), progress*100, status)
+    sys.stdout.write(text)
+    sys.stdout.flush()
 
 def normpdf(xl, mu=0, sigma=1):
     l = len(xl)
@@ -203,7 +216,7 @@ class aligned_assembly:
         self.isize_median, self.isize_MAD = MAD(self.sizes)
         self.isize_mean, _ = meansd(self.sizes)
         self.isize_sd = 1.4826 * self.isize_MAD
-        print self.isize_sd, self.isize_MAD, 1.4826 * self.isize_MAD
+        #print self.isize_sd, self.isize_MAD, 1.4826 * self.isize_MAD
 
     def get_read_size_distribution(self):
 
@@ -401,9 +414,11 @@ class aligned_assembly:
                     continue
                 positions = np.arange(self.step, length - self.window, self.step)
                 probabilities = []
-                for pos in positions:
-                    if pos % 10000 == 0:
-                        print pos
+                print "\nProcessing ",ref
+                npos = float(len(positions))
+                for idx,pos in enumerate(positions):
+                    # update progress bar
+                    update_progress(idx/npos)
                     bridges = np.array(find_intersections(tree, pos-self.window, pos+self.window)) # fetch reads in windows across contig
                     bridge_lengths, strand_alignment = get_insertlengths(bridges) # get insert sizes and mapping behaviour
                     prob_lengths = probability_of_readlength(bridge_lengths, self.isize_mean, self.isize_sd, self.prior, length) # get prob. insert sizes from null
@@ -423,7 +438,7 @@ class aligned_assembly:
             # Note: threshold should be negative
             z_criterion = (zscore < self.threshold)
             z_anomalies = zscore[z_criterion]
-            print ref, z_anomalies
+            #print ref, z_anomalies
             pos_anomalies = positions[z_criterion]
             zscores[ref] = [positions, zscore]
             anomalies[ref] = [pos_anomalies, z_anomalies] # list of anomaly locations and socres
@@ -447,7 +462,7 @@ class aligned_assembly:
 
         """
 
-        print "Anomaly detection"
+        #print "Anomaly detection"
         # get anomaly positions
         zscores, size_anomalies, tree = self.get_size_anomalies()
         map_ratios, map_anomalies = self.get_mapping_anomalies()
@@ -472,17 +487,17 @@ class aligned_assembly:
 
         for w, (ref, [positions, probs]) in enumerate(zscores.iteritems()):
             # write all Z scores to a csv file
-            print "Writing Z scores to file (%s)" % ref
+            #print "Writing Z scores to file (%s)" % ref
             for pos, prob in zip(positions, probs):
                 outfile.write("%s %s %s\n" %(ref, pos, prob))
             z_pos, z_anomalies = size_anomalies[ref] 
-            print "z_anomalies:", z_anomalies
-            print ref, z_pos
+            #print "z_anomalies:", z_anomalies
+            #print ref, z_pos
             map_positions, good_ratio, bad_ratio, unmapped_ratio, other_ratio = map_ratios[ref] 
             pos_anomalies, map_anom = map_anomalies[ref]
 
             anomaly_positions = sorted(z_pos.tolist())
-            print ref, anomaly_positions
+            #print ref, anomaly_positions
 
             # make list of positions to break this contig
             break_points[ref] = []
@@ -502,7 +517,7 @@ class aligned_assembly:
                             current = [anom_pos]
                 if current != []:
                     break_points[ref].append(np.mean(current))
-                print ref, break_points[ref]
+                #print "Breakpoints for ",ref, break_points[ref]
 
             if img_name != None:
                 # plot zscores and anomalies
@@ -519,7 +534,7 @@ class aligned_assembly:
                 anomalies_y = [-10] * len(anomalies_to_plot)
 
                 ax1.scatter(anomalies_to_plot, anomalies_y, c="r", marker = "o")
-                print "anomalies", anomalies_to_plot
+                #print "anomalies", anomalies_to_plot
 
                 # if name given, save image as .pdf and .png
                 name = img_name + "_%s.pdf" % ref
@@ -545,22 +560,25 @@ class aligned_assembly:
 
         """
         
-        for k, v in breakpoints.iteritems():
+        #for k, v in breakpoints.iteritems():
             # print breakpoints
-            print k, v
+            #print k, v
         newcontigs = []
         for contig, length in self.refdict.iteritems():
             #dna = self.fasta[contig] # sequence of contig
             dna = self.fasta.fetch(reference=contig) # sequence of contig
-            assert len(dna) > 0
+            if len(dna) <= 0:
+                print >> sys.stderr, "Cannot find BAM contig",contig," in Fasta file. Aborting."
+                sys.exit()
             if contig in breakpoints:
                 splits = breakpoints[contig]
                 splits.sort()
                 prev = 0
                 for s in splits: # iterate through breakpoints
-                    print s
+                    #print s
                     if (s - prev > trim) and ((length - s) > trim): 
                         newcontigs.append((contig,dna[int(prev):int(s-trim)])) # trim and append section before break
+                        print "Breaking",contig,"at",prev
                         prev = s + trim # trim other end of break
                 newcontigs.append((contig,dna[int(prev):]))
             else:
@@ -600,13 +618,14 @@ def main():
 
     # make assembly object
     f = aligned_assembly(args.bam, args.fasta, args.min_size, args.T, args.step_size, args.window, args.minmapq, args.maxinsert, args.fraction, args.prior)
-    print "This is ok"
     
+    print "Search for anomalous alignments"
     # find anomalies
     with open(args.outfile, "w") as of:
         bps = f.get_anomalies(of, args.trim, args.img_name)
 
     # break contig at identified anomalies
+    print "Breaking contigs"
     with open(args.newfasta, "w") as outfasta:
         f.breakContigs_double(outfasta, bps, args.trim)
 
