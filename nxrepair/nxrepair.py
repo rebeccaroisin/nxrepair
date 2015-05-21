@@ -625,7 +625,7 @@ def main():
         bps = f.get_anomalies(of, args.trim, args.img_name)
 
     # break contig at identified anomalies
-    print "Breaking contigs"
+    print "\nBreaking contigs"
     with open(args.newfasta, "w") as outfasta:
         f.breakContigs_double(outfasta, bps, args.trim)
 
