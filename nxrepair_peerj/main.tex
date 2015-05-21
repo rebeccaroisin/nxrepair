@@ -8,6 +8,7 @@
 \usepackage{multirow}
 \usepackage{hyperref}
 \usepackage{parskip}
+\usepackage{color,soul}
 
 \title{NxRepair: Error Correction in De Novo Sequence Assembly Using Nextera Mate Pairs}
 \author[1]{Rebecca R. Murphy}
@@ -31,17 +32,12 @@ Scaffolding errors and incorrect repeat disambiguation during \textit{de novo} a
 \thispagestyle{empty}
 
 \section*{Introduction}
-% To do in introduction:
-% * better introduction of genome assembly and definitions (mate pair, insert size, paired end)
-% * better introduction of other tools
-% * state that we benchmark against A5 as currently most used
-% * state utility: also useful when mate pairs used to make scaffolds
 
-\textit{De novo} assembly is the construction of a long, contiguous genomic sequence from short DNA reads, without using a reference genome. A common method of \textit{de novo} genome assembly is construction and traversal of a De Bruijn graph~\citep{compeau2011} formed by combining overlapping short reads. In the simplest case, the graph is constructed from single end reads. However, with only single end reads, disambiguating repeat regions, which tangle the de Bruijn graph, remains challenging. Paired end read technology~\citep{Fullwood2009}, in which a longer fragment of DNA is sequenced from both ends, to create a pair of short reads separated by an unsequenced region. The genomic distance from the start of one read to the end of the other is termed the insert size. Paired end reads with insert sizes of a few hundred bases provide some additional information for repeat disambiguation; even more useful are read pairs with a large insert size of several kilobases, such as the Illumina Nextera mate pairs~\citep{nextera2012}. Assembly is typically a two-stage process. First, long contiguous sections, named contigs, are constructed. Second, once the contigs cannot be extended any further, scaffolding algorithms attempt to join multiple contigs, using insert size information to determine contig order and approximate gap size. Many assemblers incorporate mate pair insert size information into either both the contig assembly and scaffolding processes~\citep{Bankevich2012}, or just into the scaffolding step~\citep{zerbino2008} but errors can still occur. The most serious mistakes are large scale scaffolding or extension errors (Fig.~\ref{fig:NxRepair} (A)), in which two two disparate regions of a genome are incorrectly joined together. Similarly, large insertion or deletion errors (indels) create structural irregularities in the \textit{de novo} assembly; whereas mistakes in base calling lead to errors at a single position only. 
+\textit{De novo} assembly is the construction of a long, contiguous genomic sequence from short DNA reads, without using a reference genome. A common method of \textit{de novo} genome assembly is construction and traversal of a de Bruijn graph~\citep{compeau2011} formed by combining overlapping short reads. {\hl In the simplest case, the graph is constructed from single end reads. However, with only single end reads, disambiguating repeat regions, which tangle the de Bruijn graph, remains challenging. Paired end read technology~\citep{Fullwood2009}, in which a longer fragment of DNA is sequenced from both ends, to create a pair of short reads separated by an unsequenced region. The genomic distance from the start of one read to the end of the other is termed the insert size. Paired end reads with insert sizes of a few hundred bases provide some additional information for repeat disambiguation; even more useful are read pairs with a large insert size of several kilobases, such as the Illumina Nextera mate pairs~\citep{nextera2012}. Assembly is typically a two-stage process. First, long contiguous sections, named contigs, are constructed. Second, once the contigs cannot be extended any further, scaffolding algorithms attempt to join multiple contigs, using insert size information to determine contig order and approximate gap size. Many assemblers incorporate mate pair insert size information into either both the contig assembly and scaffolding processes~\citep{Bankevich2012}, or just into the scaffolding step~\citep{zerbino2008} but errors can still occur. The most serious mistakes are large scale scaffolding or extension errors (Fig.~\ref{fig:NxRepair} (A)), in which two two disparate regions of a genome are incorrectly joined together. Similarly, large insertion or deletion errors (indels) create structural irregularities in the \textit{de novo} assembly; whereas mistakes in base calling lead to errors at a single position only.} 
 
 Errors in \textit{de novo} assembly can significantly affect the quality of the assembled genome, with repercussions for downstream research. Consequently, error correction and quality evaluation of \textit{de novo} assemblies are problems receiving considerable research interest. Recent work, such as the Assemblathon~\citep{Bradnam2013} and GAGE~\citep{Salzberg2012} collaborations, compare the quality of assemblies prepared by various assemblers by comparing the \textit{de novo} assemblies produced with their equivalent reference genomes. However, in the absence of a high-quality reference genome, other methods of quality evaluation must be used. Ghodsi et al.~\citep{Ghodsi2013} have developed a Bayesian method of assembly quality evaluation, which can calculate an assembly quality score, without requiring a reference genome. However, this provides only an overall quality score and cannot be used to identify errors or low-quality regions. Several recent papers have developed error identification and correction methods, which perform a fine-grained analysis of assembly quality. The most well-known of these is the A5 Assembly Pipeline~\citep{Coil2014, tritt2012}, which includes an error detection and rescaffolding step that makes use of mate pair alignment information. Two new tools, REAPR~\citep{Hunt2013} and ALE~\citep{Clark2013} have also been developed to use read pair data to identify misassemblies. A similar tool is currently under development at the Broad Institute~\citep{pilon2014}. However, with the exception of ALE, which is no longer actively maintained, these newer tools are not optimised to use mate pair information.  
 
-Here we introduce NxRepair, an assembly error detection tool that can identify the most serious misassemblies by examining the distribution of Nextera mate pair insert sizes. NxRepair does not require a reference genome and can be used with assemblies prepared with just a single mate pair library. It specifically targets the most serious scaffolding errors and large-scale indels by identifying regions with a high number of anomalous insert sizes, or very few supporting reads, breaking the scaffold and optionally trimming out the misassembled region. NxRepair also provides a fine-grained quality score, allowing researchers to visualise poor-quality regions. We demonstrate usage of NxRepair on bacterial genomes assembled from a single Nextera mate pair library using the state of the art SPAdes assembler~\citep{Bankevich2012}, which explicitly uses insert size information during contig construction, as well as for scaffolding. Using these genomes, we benchmark NxRepair against the error correction module of the A5 assembler, A5qc~\citep{tritt2012}, which is currently the most widely used error correction tool, demonstrating NxRepair's superior performance.
+Here we introduce NxRepair, an assembly error detection tool that can identify the most serious misassemblies by examining the distribution of Nextera mate pair insert sizes. NxRepair does not require a reference genome and can be used with assemblies prepared with just a single mate pair library. It specifically targets the most serious scaffolding errors and large-scale indels by identifying regions with a high number of anomalous insert sizes, or very few supporting reads, breaking the scaffold and optionally trimming out the misassembled region. NxRepair also provides a fine-grained quality score, allowing researchers to visualise poor-quality regions. We demonstrate usage of NxRepair on bacterial genomes assembled from a single Nextera mate pair library using the state of the art SPAdes assembler~\citep{Bankevich2012}, which explicitly uses insert size information during contig construction, as well as for scaffolding. Using these genomes, we benchmark NxRepair against the error correction module of the A5 assembler, A5qc~\citep{tritt2012}, which is currently the most widely used error correction tool.
 
 \begin{figure*}
 \centerline{\includegraphics[width=0.8\textwidth]{fig1_nxrepair.pdf}}
@@ -54,7 +50,7 @@ Nextera mate pair libraries are prepared to have a certain insert size, typicall
 
 To calculate the degree of support for the assembly at each site across a contig, NxRepair retrieves all mate pairs spanning the region $[i-W, i+W]$, of size $2W-1$ at position $i$ on the contig, where spanning is defined to mean that one read ends entirely before the region $[i-W, i+W]$ and the other read begins entirely after (see Fig.~\ref{fig:spanning}.) The default value of $W$ is 200 bases (see Table~\ref{tab:parameters}). 
 
-A uniform distribution was selected to model anomalous insert sizes, as it makes no assumption about the cause of an anomaly. Even though the insert size distribution for correctly aligned mate pairs will typically display a longer tail than the normal distribution (unless a gel-extraction protocol is used), we found that using a normal distribution to model correct insert sizes did not adversely affect NxRepair's error detection. This is because each site is spanned by many mate pairs and the insert size of correctly aligned mate pairs is not correlated with location. Consequently, the small fraction of correctly aligned mate pairs with a very large insert size do not lead to false positives in error identification. 
+A uniform distribution was selected to model anomalous insert sizes, as it makes no assumption about the cause of an anomaly. It is uniform over the contig length, $L$, as opposed to over all possible sites in the assembly, as only pairs where both members align fully to that contig are considered. Similarly, even though the insert size distribution for correctly aligned mate pairs will typically display a longer tail than the normal distribution (unless a gel-extraction protocol is used), we found that using a normal distribution to model correct insert sizes did not adversely affect NxRepair's error detection. This is because each site is spanned by many mate pairs and the insert size of correctly aligned mate pairs is not correlated with location. Consequently, despite these assumptions, the small fraction of correctly aligned mate pairs with a very large insert size do not lead to false positives in error identification. 
 
 We define a latent indicator variable $X_l\in\{0,1\}$ for each pair of reads, $l$, which takes the value $1$ if the insert size came from the null distribution, and $0$ otherwise. Within each window queried, the probability that each retrieved read, $r_l$ is drawn from the null distribution is given by:
 
@@ -87,7 +83,7 @@ Within each contig, the contig assembly support mean $\mu_D$ and variance $s_D$ 
 \label{eq:contigD}
 \end{equation}
 
-We use these contig specific mean and variance, rather than the global values, to prevent local variations in coverage from either causing false positives or masking changes in the insert size distribution. Using these values, the Z-score $z_l$ within each queried interval is calculated as: 
+We use these contig specific mean and variance, rather than the global values, to prevent local variations in coverage from either causing false positives or masking changes in the insert size distribution. Although this reduces sensitivity to misassemblies in very small contigs, it is effective at preventing more damaging false positives. Using these values, the Z-score $z_l$ within each queried interval is calculated as: 
 
 \begin{equation}
 z_l = \frac{D_l - \hat{\mu}_D}{s_D}
@@ -100,12 +96,12 @@ The Z-score is sensitive both to local changes in the insert size distribution, 
 A misassembly is identified if $z_l < T$ for a user-defined threshold $T$ (default value -4). This threshold describes the number of standard deviations below the mean assembly support that is required to identify an anomaly. The default value of -4 will flag only positions whose assembly support is less than four standard deviations below the mean level of support.
 
 \begin{figure}
-\centerline{\includegraphics[width=0.8\textwidth]{spanning.pdf}}
+\centerline{\includegraphics[width=0.8\textwidth]{fig2_spanning.pdf}}
 \caption{Schematic illustrating mate pairs spanning a selected region. The upper read pair (green) spans the indicated region, as both reads align entirely outside of the region $[i-W, i+W]$. The lower read pair (cyan) do not span the indicated region, as the left-hand read overlaps the target area. \label{fig:spanning}}
 \end{figure}
 
 \subsection*{Global Assembly Parameters}
-NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the \textit{de novo} assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation and pairs whose insert size exceed 30 kb (approximately 10 times the mean insert size). Pairs whose mapping quality falls below a user specified threshold (minmapq, default value 40) are also excluded, removing reads that are not uniquely mapped from the calculation of global parameters. The global mean $\hat{\mu}$ and median absolute deviation ($\text{MAD}$) are calculated across all contigs in the assembly as:
+NxRepair identifies misassemblies by identifying regions where the mate pair insert size distribution differs significantly from the insert size distribution across the entirety of the \textit{de novo} assembly. Consequently, it is necessary to have a robust estimate of the global mate pair insert size distribution. For calculation of population statistics, mate pairs that align to different contigs are excluded, as are mate pairs with an incorrect strand or pairing orientation and pairs whose insert size exceed a user-defined maximum (maxinsert, whose default value of 30 kb is approximately 10 times the mean insert size for Nextera mate pairs). Pairs whose mapping quality falls below a user specified threshold (minmapq, default value 40) are also excluded, removing reads that are not uniquely mapped from the calculation of global parameters. The global mean $\hat{\mu}$ and median absolute deviation ($\text{MAD}$) are calculated across all contigs in the assembly as:
 
 \begin{equation}
 \hat{\mu} = \frac{\sum_{l=1}^N Y_l}{N} \qquad \text{MAD} = \text{median}_m(|Y_m - \text{median}_l(Y_l)|)
@@ -126,7 +122,7 @@ The $\text{MAD}$ is a robust estimator for the standard deviation, as it is not 
 These were then used as the parameters of the null distribution, as described in the main paper.
 
 \subsection*{Interval Tree Construction}
-To facilitate rapid lookup of mate pair properties, we construct an interval tree~\citep{cormen2009} for each contig in the \textit{de novo} assembly. An interval tree is a data structure that facilitates $O(\text{log} n + m)$ lookup of intervals that span a given point or interval, for $n$ total entries and $m$ spanning entries. The interval tree contains the start and end positions of each mate pair aligned to that contig, as well as a flag variable indicating whether that mate pair had correct strand and pairing orientation. Mate pairs where the two reads align to different contigs were excluded. Mapping quality is currently not considered at this stage - reads are retained regardless of mapq score. For each position $i$ for which the Z-score is to be calculated, the tree is queried with a start position $i-W$ and end position $i+W$, to retrieve read pairs spanning the interval between positions $i-W$ and $i+W$ (exclusive). The insert sizes of retrieved read pairs are then used to calculate the Z-score for position $i$. This allows NxRepair to rapidly query positions across a contig to discover the insert size distribution at the queried position. Use of the interval tree significantly increases the efficiency of Z-score calculation, as each pair of reads is fetched only once from the bam file in order to build the tree. All relevant parameters are then stored in the tree for rapid look-up when a position is queried. This has several advantages. Firstly, it is significantly faster than fetching reads only when a position is queried. Secondly, it is more space efficient than a frequency array of all positions on all contigs but does not lose any information about the exact alignment positions. Finally, once construction of the tree is complete, multiple passes across a contig (for example with different spatial resolutions, or using different window sizes) can rapidly be made using the same tree.      
+To facilitate rapid lookup of mate pair properties, we construct an interval tree~\citep{cormen2009} for each contig in the \textit{de novo} assembly. An interval tree is a data structure that facilitates $O(\text{log} n + m)$ lookup of intervals that span a given point or interval, for $n$ total entries and $m$ spanning entries. The interval tree contains the start and end positions of each mate pair aligned to that contig, as well as a flag variable indicating whether that mate pair had correct strand and pairing orientation. Mate pairs where the two reads align to different contigs were excluded. Mapping quality is currently not considered at this stage - reads are retained regardless of mapq score. For each position $i$ for which the Z-score is to be calculated, we perform a stabbing query: the tree is queried with a start position $i-W$ and end position $i+W$, to retrieve read pairs spanning the interval between positions $i-W$ and $i+W$ (exclusive). The insert sizes of retrieved read pairs are then used to calculate the Z-score for position $i$. This allows NxRepair to rapidly query positions across a contig to discover the insert size distribution at the queried position. Use of the interval tree significantly increases the efficiency of Z-score calculation, as each pair of reads is fetched only once from the bam file in order to build the tree. All relevant parameters are then stored in the tree for rapid look-up when a position is queried. This has several advantages. Firstly, it is significantly faster than fetching reads only when a position is queried. Secondly, it is more space efficient than a frequency array of all positions on all contigs but does not lose any information about the exact alignment positions. Finally, once construction of the tree is complete, multiple passes across a contig (for example with different spatial resolutions, or using different window sizes) can rapidly be made using the same tree.      
 
 \subsection*{Misassembly Location and Contig Breaking}
 To improve the quality of the \textit{de novo} assembly, a contig is broken into two separate pieces at the site of a misassembly. The broken ends of the two new contigs can optionally be trimmed by a user defined length (default 4 kb) to remove the misassembled region. Trimming allows removal of the incorrectly assembled regions around a break-point, but can be switched off if a user does not want any sequence to be removed from the assembly. To prevent excessive clipping, misassemblies separated by less than the trimming distance are grouped together, the contig is broken at the start and end of the misassembled region and the misassembled section is discarded. Low-scoring regions within the trimming distance of the ends of contigs are not considered misassemblies, as the high proportion of mate pairs aligning here whose mate maps to a different contig reduces the number of pairs under consideration and hence lowers the observed Z-score. This also ensures that circular molecules, such as small plasmids, which are assembled into a single contig, are not truncated because of mate pairs at either end of the assembly that appear to span the entire contig, but which are spatially close when circularisation is considered.
@@ -152,8 +148,8 @@ We have used the Interval Tree implementation from the bx-python library (\url{h
 
 \section*{Materials and Methods}
 \subsection*{Data}
-Nine bacterial genomes were prepared according to the Nextera mate pair protocol and sequenced in duplicate in a single MiSeq run using $2 \times 151$ bp reads. The organisms sequenced are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. Table~\ref{tab:yield} gives an overview of sequencing yield, mean quality and read length after trimming. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). In addition,
-the trimmed reads are available at the European Nucleotide Archive (ENA) at \url{http://www.ebi.ac.uk/ena/data/view/PRJEB8559}. Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. For performance optimisation, the first replicate from each genome sequenced was used as a training set. The test set, for performance evaluation, was formed from the second replicate of each genome. 
+Nine bacterial genomes were prepared according to the Nextera mate pair protocol and sequenced in duplicate in two independent MiSeq runs using $2 \times 151$ bp reads. The organisms sequenced are shown in Table~\ref{data-description}. Reads were trimmed using the MiSeq inbuilt trimmer. Table~\ref{tab:yield} gives an overview of sequencing yield, mean quality and read length after trimming. The untrimmed reads are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). In addition,
+the trimmed reads are available at the European Nucleotide Archive (ENA) at \url{http://www.ebi.ac.uk/ena/data/view/PRJEB8559}. Note that only these Nextera mate pair libraries were used. No additional single end or paired end libraries were required. For performance optimisation, the first replicate from each genome sequenced was used as a training set. The test set, for performance evaluation, was formed from the second replicate of each genome. The replicates of each genome are derived from the same library, but were from separate sequencing runs, facilitating independent sub-sampling of the fragment library. Hence there is considerable variation between the two replicates in both the yields and read-lengths, as well as in the \textit{de novo} assemblies obtained (see Table~\ref{tab:yield}). We are aware that using replicates prepared in this manner does not result in as much variation as if two separate libraries had been prepared for each genome. However, given the considerable resources required to generate such libraries, we feel that this is a reasonable compromise that makes efficient use of the available data.
 
 \subsection*{Performance Optimisation}
 \subsubsection*{ROC Plots}
@@ -177,11 +173,11 @@ To prepare the ROCs each position $i$ in $A_{Nx}$ was labeled as true positive (
 \label{eq:tpr}
 \end{equation}
 
-Based on the resultant ROC plots, shown in Fig.~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to detect true misassemblies with minimal false positives, so was used for all subsequent analyses. 
+Based on the resultant ROC plots, shown in Fig.~\ref{fig:ROCs}, a threshold in $Z$ of -4 was found to detect true misassemblies with minimal false positives, so was used for all subsequent analyses and is the default value used in NxRepair error correction. Users who are concerned about false positives are encouraged to use a more stringent threshold value.
 
 \begin{figure}
-\centerline{\includegraphics[width=0.8\textwidth]{allROC.pdf}}
-\caption{ROC plots for the seven genomes containing misassemblies.\label{fig:ROCs}}
+\centerline{\includegraphics[width=0.8\textwidth]{fig3_allROC.pdf}}
+\caption{ROC plots for the seven genomes from Replicate 1 that contained misassemblies.\label{fig:ROCs}}
 \end{figure}
 
 \subsubsection*{Profiling}
@@ -236,9 +232,19 @@ Finally we used QUAST~\citep{gurevich2013} to evaluate the assembly quality foll
 \section*{Results and Discussion}
 We used NxRepair to correct \textit{de novo} assemblies from Replicate 2 of each of the nine bacterial genomes described above. Mate pair reads were trimmed, assembled using the SPAdes assembler (version 3.1.1)~\citep{Bankevich2012} and then aligned back to the assembled scaffold using BWA-MEM~\citep{li2013}. We used QUAST~\citep{gurevich2013} to evaluate the assembly quality before and after NxRepair correction by aligning to an appropriate reference genome. For all NxRepair analyses, the default parameters, shown in Table~\ref{tab:parameters} were used. Fig.~\ref{fig:NxRepair} (A) shows a misassembled genome that contained several scaffolding errors identified by NxRepair (Fig.~\ref{fig:NxRepair} (B)). Following NxRepair correction, the most significant structural misassemblies were resolved (Fig.~\ref{fig:NxRepair} (C)). The improvement following NxRepair correction is shown for all nine genomes in Table~\ref{tab:improvement} (middle column). For two assemblies, errors were removed without reducing NGA50; for one genome, errors were removed but NGA50 was slightly reduced; for six genomes, three of which contained no large errors, no errors were found and the assembly was unchanged. We are not able to correct all misassemblies, as not all misassemblies exhibit a change in Z-score large enough to identify an error against the background score fluctuation caused by the wide insert size distribution of the Nextera mate pairs. 
 
-To benchmark NxRepair's performance, we also attempted to identify assembly errors using the A5qc error correction module of the A5 Assembly pipeline~\citep{tritt2012}. The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (K. pneumoniae), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding using the A5 scaffolder did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. Consequently, we are confident that, for these high-quality alignments, NxRepair is a superior error-detection tool. 
+To benchmark NxRepair's performance, we also used the A5qc error correction module of the A5 Assembly pipeline~\citep{tritt2012} (version 20140604) to identify errors in the {\emph de novo} assemblies:
 
-Despite this good performance, it is clear that NxRepair is not able to find all misassemblies present. There are several reasons for this. Firstly, NxRepair's resolution is limited to relatively large-scale errors, as a very large disruption in mate pair insert sizes over a region of approximately 1 kb to significantly reduce the Z-score. Consequently, indel errors with a displacement smaller than 1 kb will not be detected. Secondly, NxRepair is limited by the intrinsic error rate of the mate pair library used. If the insert size distribution has a very wide variance, large fluctuations caused by assembly errors will be masked, making error correction more challenging. 
+\texttt{a5\_pipeline.pl --begin=4 --end=4 bacteria.fastq.gz  bacteria}
+
+%Note that the A5qc tool, which is the fourth step in the five step A5qc pipeline, expects as input the files output from the upstream step. Hence, to achieve successful analysis, it was necessary to rename the {\emph de novo} assembly \textttt{.fasta} files containing the scaffolds to contain the suffix \textttt{.crude} -- \textttt{bacteria.crude.scaffolds.fasta} -- and to supply the prefix only (\textttt{bacteria}) as an argument to the error correction module.   
+
+The results are shown in Table~\ref{tab:improvement} (right hand column). For eight of the nine genomes evaluated, A5qc was unable to detect any errors. For the final genome (K. pneumoniae), A5qc did detect errors, but the contig-breaking process left Quast unable to align the resultant assembly to the reference genome. Re-scaffolding these contigs using the A5 scaffolder:
+
+\texttt{a5\_pipeline.pl --begin=4 --end=5 bacteria.fastq.gz  bacteria}
+
+did allow reference alignment, but the assembly contained more misassemblies (15) than the original assembly. 
+
+Despite its better performance in this case, it is clear that, like the A5qc module, NxRepair is not able to find all misassemblies present. There are several reasons for this. Firstly, NxRepair's resolution is limited to relatively large-scale errors, as a very large disruption in mate pair insert sizes over a region of approximately 1 kb is required to significantly reduce the Z-score. Consequently, indel errors with a displacement smaller than 1 kb will not be detected. Secondly, NxRepair is limited by the intrinsic error rate of the mate pair library used. If the insert size distribution has a very wide variance, large fluctuations caused by assembly errors will be masked, making error correction more challenging. 
 
 A number of improvements to NxRepair might mitigate these issues. Firstly, NxRepair currently identifies errors using a simple threshold applied to the total assembly support from spanning mate pairs, $D$. A more rigorous approach would implement a fully probabilistic method of error detection, using the distribution of spanning mate pair insert sizes to evaluate the relative probability of an error. 
 
@@ -341,36 +347,37 @@ We evaluated the runtime and peak memory usage of NxRepair on each of the nine g
    \hline
   \end{tabular}
 }
-  \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required).\label{data-description}}
+  \caption{Summary of bacteria analysed and the relevant NCBI information on their reference genomes. There were two repeats of each strain. All 18 samples were prepared with the Nextera mate pair protocol and sequenced in a single MiSeq run using $2 \times 151$ bp reads. The untrimmed reads we used as input to NxTrim (3.9Gbp in all) are available from BaseSpace via \url{https://basespace.illumina.com/s/TXv32Ve6wTl9} (free registration required). In addition, the trimmed reads are available at the European Nucleotide Archive (ENA) at \url{http://www.ebi.ac.uk/ena/data/view/PRJEB8559}.\label{data-description}}
 \end{table}
+
 
 \begin{table}[]
 \begin{center}
 {
-{\begin{tabular}{llll}\hline
-Genome & Yield [bp] & Mean base quality & Mean read length \\\midrule
-B. cereus lib1 & 140,034,231 & 30.83 & 120.50  \\
-B. cereus lib2 & 150,883,336 & 31.69 & 124.08  \\
-E. coli DH10B lib1 & 229,164,175 & 31.50 & 127.55 \\
-E. coli DH10B lib2 & 167,955,255 & 31.19 & 126.49 \\
-E. coli MG1655 lib1 & 138,893,204 & NaN & 104.56 \\
-E. coli MG1655 lib2 & 164,490,239 & 31.93 & 129.67 \\
-L. monocytogenes lib1 & 197,796,210 & 32.66 & 129.79 \\
-L. monocytogenes lib2 & 161,114,700 & 31.81 & 125.79 \\
-M. ruber lib1 & 180,542,545 & 29.96 & 123.69 \\
-M. ruber lib2 & 150,298,958 & 31.09 & 129.40 \\
-P. heparinus lib1 & 186,070,764 & 32.21 & 127.30 \\
-P. heparinus lib2 & 146,448,694 & 31.32 & 124.00 \\
-K. pneumoniae lib1 & 182,614,602 & 31.86 & 131.70 \\
-K. pneumoniae lib2 & 166,306,322 & 31.82 & 130.28 \\
-R. sphaeroides lib1 & 184,138,610 & 30.08 & 127.99 \\
-R. sphaeroides lib2 & 210,961,284 & 30.12 & 129.79 \\
-M. tuberculosis lib1 & 211,892,634 & 30.43 & 127.37 \\
-M. tuberculosis lib2 & 177,615,358 & 30.06 & 126.82 \\\hline
+{\begin{tabular}{lllll}\hline
+Genome & Yield [bp] & Mean base quality & Mean read length & Raw NGA50 \\\midrule
+B. cereus lib1 & 140,034,231 & 30.83 & 120.50 &  1,157,404\\
+B. cereus lib2 & 150,883,336 & 31.69 & 124.08  & 1,157,846\\
+E. coli DH10B lib1 & 229,164,175 & 31.50 & 127.55 & 576,143\\
+E. coli DH10B lib2 & 167,955,255 & 31.19 & 126.49 & 573,003\\
+E. coli MG1655 lib1 & 138,893,204 & NaN & 104.56 & 640,732\\
+E. coli MG1655 lib2 & 164,490,239 & 31.93 & 129.67 & 693,692\\
+L. monocytogenes lib1 & 197,796,210 & 32.66 & 129.79 & 1,496,615\\
+L. monocytogenes lib2 & 161,114,700 & 31.81 & 125.79 & 1,496,613\\
+M. ruber lib1 & 180,542,545 & 29.96 & 123.69 & 3,095,733\\
+M. ruber lib2 & 150,298,958 & 31.09 & 129.40 & 2,702,549\\
+P. heparinus lib1 & 186,070,764 & 32.21 & 127.30 & 1,269,259\\
+P. heparinus lib2 & 146,448,694 & 31.32 & 124.00 & 1,269,147\\
+K. pneumoniae lib1 & 182,614,602 & 31.86 & 131.70 & 577,220\\
+K. pneumoniae lib2 & 166,306,322 & 31.82 & 130.28 & 578,813\\
+R. sphaeroides lib1 & 184,138,610 & 30.08 & 127.99 & 3,181,390\\
+R. sphaeroides lib2 & 210,961,284 & 30.12 & 129.79 & 2,715,434\\
+M. tuberculosis lib1 & 211,892,634 & 30.43 & 127.37 & 184,170\\
+M. tuberculosis lib2 & 177,615,358 & 30.06 & 126.82 & 186,136\\\hline
 \end{tabular}}{}
 }
 \end{center}
-\caption{Yield in bp, mean base quality and average read length after adapter removal \label{tab:yield}}
+\caption{Yield in bp, mean base quality and average read length after adapter removal, as well as the raw NGA50 score prior to NxRepair analysis for all genomes analysed.\label{tab:yield}}
 \end{table}  
 
 \section*{Conclusions}
